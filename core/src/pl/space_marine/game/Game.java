@@ -1,31 +1,13 @@
 package pl.space_marine.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import pl.space_marine.game.builder.Builder;
+import pl.space_marine.game.iterator.ImpedimentsList;
+import pl.space_marine.game.rocket.Rocket;
 
-public class Game extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-	}
+public class Game {
+    private Builder builder;
+    private Rocket rocket = Rocket.getInstance();
+    private ImpedimentsList list;
 
-	@Override
-	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
-	}
+    private boolean isPaused = false;
 }

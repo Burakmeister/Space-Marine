@@ -7,7 +7,6 @@ import pl.space_marine.game.rocket.Rocket;
 public abstract class Impediment {
     // abstrakcyjna klasa przeszkody/przeciwnika
 
-    protected Image texture;          // textura
     protected Listener[] listeners;     // listenery
 
     protected float collisionDamage;    // obrażenia zadane podczas zderzenia z graczem
@@ -19,7 +18,6 @@ public abstract class Impediment {
 
     public Impediment(Image image, Listener[] listeners, float collisionDamage, float direction, int speed, int x, int y){
         this.collisionDamage = collisionDamage;
-        this.texture = texture;
         this.listeners = listeners;
         this.direction = direction;
         this.speed = speed;

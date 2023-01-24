@@ -1,5 +1,6 @@
 package pl.space_marine.game.rocket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.space_marine.game.bullets.Bullet;
@@ -23,6 +24,8 @@ public class Rocket {
     private int y;
 
     private Rocket(){
+        this.bullets = new ArrayList<>();
+        this.stages = new ArrayList<>();
     }
 
     public static Rocket getInstance(){
