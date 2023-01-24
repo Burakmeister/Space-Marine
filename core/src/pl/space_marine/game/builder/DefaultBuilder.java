@@ -12,7 +12,7 @@ public class DefaultBuilder implements Builder{
     }
     @Override
     public void addBird() {
-        this.list.add(new Bird());
+//        this.list.add(new Bird());
     }
 
     @Override

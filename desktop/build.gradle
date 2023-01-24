@@ -41,6 +41,10 @@ task dist(type: Jar) {
     with jar
 }
 
+dependencies {
+    implementation project(path: ':android')
+}
+
 
 dist.dependsOn classes
 
