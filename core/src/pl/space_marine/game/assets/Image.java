@@ -5,18 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum Image {
     // elementy konstrukcyjne rakiety
-    AVIONIC("avionic.png"),
-    BOOSTER("booster.png"),
-    ENGINE("engine.png"),
-    GUN("gun.png"),
-    TANK("tank.png"),
+//    AVIONIC("avionic.png"),
+//    BOOSTER("booster.png"),
+//    ENGINE("engine.png"),
+//    GUN("gun.png"),
+//    TANK("tank.png"),
 
     // pociski
 
     //przeszkody
     BIRD("bird.png"),
     DRAGON("dragon.png"),
-    CLOUD("cloud.png"),
+    CLOUD("clouds.png"),
     METHEOR("metheor.png")
     ;
 
