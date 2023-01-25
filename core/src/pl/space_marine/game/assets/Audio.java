@@ -3,7 +3,7 @@ package pl.space_marine.game.assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
-public enum Audio {
+public enum Audio{
     ENGINE("engine.wav");
 
     private Sound sound;

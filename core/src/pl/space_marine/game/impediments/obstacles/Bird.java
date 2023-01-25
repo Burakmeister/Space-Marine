@@ -1,10 +1,10 @@
 package pl.space_marine.game.impediments.obstacles;
 
 import pl.space_marine.game.assets.Image;
-import pl.space_marine.game.impediments.Listener;
+import pl.space_marine.game.impediments.Obstacle;
 
-public class Bird extends Obstacle{
-    public Bird(float collisionDamage, float direction, int speed, int x, int y) {
-        super(Image.BIRD, null, collisionDamage, direction, speed, x, y);
+public class Bird extends Obstacle {
+    public Bird(Image image, float collisionDamage, float direction, int speed, int x, int y) {
+        super(image, null, collisionDamage, direction, speed, x, y);
     }
 }

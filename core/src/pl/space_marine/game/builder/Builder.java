@@ -1,6 +1,7 @@
 package pl.space_marine.game.builder;
 
-import pl.space_marine.game.iterator.ImpedimentsList;
+import pl.space_marine.game.impediments.Impediment;
+import pl.space_marine.game.iterator.ImpedimentsIterator;
 
 public interface Builder {
     public void addBird();
@@ -14,5 +15,10 @@ public interface Builder {
     public void addUfo();
     public void addDragon();
     public void moveHigher(int up);
-    public ImpedimentsList getResult();
+    public void setX(int move);
+    public void setDirection(float direction);
+    public void setSpeed(int speed);
+    public void setCollisionDamage(float collisionDamage);
+    public ImpedimentsIterator<Impediment> getResult();
+    public int getHeight();
 }

@@ -11,12 +11,12 @@ public class Animator{
     private int x, y;
     private float scale = 1f;
     private Animation<TextureRegion> animation;
-    private pl.space_marine.game.assets.Animation anime;
+    private pl.space_marine.game.assets.Image anime;
     private SpriteBatch batch;
 
     float stateTime;
 
-    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Animation animation, int x, int y){
+    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y){
         this.anime = animation;
         this.x = x;
         this.y = y;
@@ -24,7 +24,7 @@ public class Animator{
         this.create();
     }
 
-    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Animation animation, int x, int y, float scale){
+    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y, float scale){
         this.anime = animation;
         this.scale = scale;
         this.x = x;
@@ -34,9 +34,7 @@ public class Animator{
     }
 
     public void render() {
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
         stateTime+=Gdx.graphics.getDeltaTime();
-
         TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
         int width, height;
         width = this.anime.getTexture().getWidth()/this.anime.getCols();
@@ -53,6 +51,14 @@ public class Animator{
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
     }
 
     private void create(){

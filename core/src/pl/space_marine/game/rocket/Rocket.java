@@ -1,8 +1,12 @@
 package pl.space_marine.game.rocket;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.space_marine.game.Game;
+import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.bullets.Bullet;
 import pl.space_marine.game.rocket.stages.Stage;
 
@@ -22,10 +26,14 @@ public class Rocket {
     private int armor;
     private int x;
     private int y;
+    private float orientation = 0; //radiany, ale pomijamy pi, wiec -> (0-2) 0 - w gore     1 - w dol
+
+    private Image image;
 
     private Rocket(){
         this.bullets = new ArrayList<>();
         this.stages = new ArrayList<>();
+        this.image = Image.ROCKET;
     }
 
     public static Rocket getInstance(){
@@ -36,4 +44,21 @@ public class Rocket {
     public void shot(){
         //not implemented yet
     }
+    public Image getImage() {
+        return image;
+    }
+    public void setY(int y) {
+        this.y = y;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+
+
 }
