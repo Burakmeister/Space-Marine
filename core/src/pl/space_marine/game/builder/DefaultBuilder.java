@@ -2,6 +2,8 @@ package pl.space_marine.game.builder;
 
 import static pl.space_marine.game.Game.SCREEN_HEIGHT;
 
+import java.util.Random;
+
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.impediments.enemies.Dragon;
@@ -40,12 +42,23 @@ public class DefaultBuilder implements Builder{
 
     @Override
     public void addCloud() {
-        this.list.add(new Cloud(Image.BALLOON, collisionDamage, direction, speed, x, y));
+        Random rand = new Random();
+        switch(rand.nextInt(3)){
+            case 0:
+                this.list.add(new Cloud(Image.CLOUD, collisionDamage, direction, speed, x, y));
+                break;
+            case 1:
+                this.list.add(new Cloud(Image.CLOUD2, collisionDamage, direction, speed, x, y));
+                break;
+            case 2:
+                this.list.add(new Cloud(Image.CLOUD3, collisionDamage, direction, speed, x, y));
+                break;
+        }
     }
 
     @Override
     public void addBalloon() {
-        this.list.add(new Balloon(Image.CLOUD, collisionDamage, direction, speed, x, y));
+        this.list.add(new Balloon(Image.BALLOON, collisionDamage, direction, speed, x, y));
     }
 
     @Override

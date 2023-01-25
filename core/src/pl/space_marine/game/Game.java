@@ -13,7 +13,7 @@ import pl.space_marine.game.rocket.Rocket;
 public class Game {
     public static final int SCREEN_WIDTH = Gdx.graphics.getWidth();
     public static final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
-    public static final int HEIGHT_BETWEEN_IMPEDIMENTS = 100;
+    public static final int HEIGHT_BETWEEN_IMPEDIMENTS = 300;
 
     private Builder builder;
     private ImpedimentsIterator iterator;
