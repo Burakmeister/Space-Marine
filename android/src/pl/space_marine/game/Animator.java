@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Animator{
     private int x, y;
     private float scale = 1f;
+    private boolean flip = false;
     private Animation<TextureRegion> animation;
     private pl.space_marine.game.assets.Image anime;
     private SpriteBatch batch;
@@ -21,6 +22,15 @@ public class Animator{
         this.x = x;
         this.y = y;
         this.batch = batch;
+        this.create();
+    }
+
+    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y, boolean flip){
+        this.anime = animation;
+        this.x = x;
+        this.y = y;
+        this.batch = batch;
+        this.flip = flip;
         this.create();
     }
 
@@ -39,7 +49,7 @@ public class Animator{
         int width, height;
         width = this.anime.getTexture().getWidth()/this.anime.getCols();
         height = this.anime.getTexture().getHeight()/this.anime.getRows();
-        batch.draw(currentFrame, x, y, width*scale, height*scale);
+        batch.draw(currentFrame, x, y, (flip ? -1 : 1)*width*scale, height*scale);
     }
 
     public void dispose() {
@@ -73,7 +83,7 @@ public class Animator{
                 frames[idx++] = tmp[i][j];
             }
         }
-        this.animation = new Animation<>(0.025f, frames);
+        this.animation = new Animation<>(0.1f, frames);
         stateTime = 0;
     }
 }

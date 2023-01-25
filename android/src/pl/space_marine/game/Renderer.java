@@ -51,13 +51,29 @@ public class Renderer extends ApplicationAdapter {
     }
 
     public void draw() {
-        ImpedimentsIterator list = game.drawImpediments();
-        for (Iterator it = list; it.hasNext(); ) {
+        ImpedimentsIterator list = game.drawImpediments();  //pobieram iterator impedimentów z game
+        for (Iterator it = list; it.hasNext(); ) {          // pętla z iteratorem
             Impediment impediment = (Impediment) it.next();
-            if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {
-                batch.draw(impediment.getImage().getTexture(), impediment.getX(), impediment.getY());
+            boolean flip = false;
+            switch (impediment.getImage().getDirection()){  // sprawdzam orientacje i czy trzeba odbic
+                case LEFT:{
+                    if(impediment.getDirection()>0 && impediment.getDirection()<1){
+                        flip = true;
+                    }
+                }
+                case RIGHT:{
+                    if(impediment.getDirection()>1 && impediment.getDirection()<2){
+                        flip = true;
+                    }
+                }
+            }
+
+            if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {         // jesli obrazek nie jest animowany to po prostu rysuje
+                    batch.draw(impediment.getImage().getTexture(),
+                            impediment.getX(), impediment.getY(),
+                            (flip ? -1 : 1)*impediment.getImage().getTexture().getWidth(), impediment.getImage().getTexture().getHeight());
 //                Log.d("ganerator", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
-            } else {
+            } else {                                                                                    // w innym wypadku tworze Animator albo uzywal istniejacego jesli jest utworzony
                 boolean drawed = false;
                 for (Animator anime : animations) {
                     if (anime.getX() == impediment.getX() && anime.getY() == impediment.getY()) {
@@ -67,7 +83,7 @@ public class Renderer extends ApplicationAdapter {
                     }
                 }
                 if (!drawed) {
-                    Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY());
+                    Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip);
                     animations.add(tmp);
                     tmp.render();
                 }
@@ -75,7 +91,7 @@ public class Renderer extends ApplicationAdapter {
             }
         }
         Rocket rocket = game.getRocket();
-        batch.draw(rocket.getImage().getTexture(), rocket.getX(), rocket.getY());
+        batch.draw(rocket.getImage().getTexture(), rocket.getX(), rocket.getY());       // rysowanie rakiety
 //        rocket.setY(rocket.getY() + 1);
     }
 }
