@@ -1,4 +1,4 @@
-package pl.space_marine.game.impediments.obstacles;
+package pl.space_marine.game.impediments;
 
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Impediment;
