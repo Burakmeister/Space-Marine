@@ -69,26 +69,42 @@ public class Renderer extends ApplicationAdapter {
             }
 
             if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {         // jesli obrazek nie jest animowany to po prostu rysuje
+                //	public void draw (Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX,
+                //		float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY);
+
                     batch.draw(impediment.getImage().getTexture(),
                             impediment.getX(), impediment.getY(),
-                            (flip ? -1 : 1)*impediment.getImage().getTexture().getWidth(), impediment.getImage().getTexture().getHeight());
+                            impediment.getImage().getTexture().getWidth()/2,
+                            impediment.getImage().getTexture().getHeight()/2,
+                            impediment.getImage().getTexture().getWidth(),
+                            impediment.getImage().getTexture().getHeight(),
+                            impediment.getImage().getTexture().getWidth()/impediment.getImage().getTexture().getHeight(),
+                            impediment.getImage().getTexture().getHeight()/impediment.getImage().getTexture().getWidth(),
+                            impediment.getDirection()*180,
+                            0,
+                            0,
+                            impediment.getImage().getTexture().getWidth(),
+                            impediment.getImage().getTexture().getHeight(),
+                            flip, false
+                            );
 //                Log.d("ganerator", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
             } else {                                                                                    // w innym wypadku tworze Animator albo uzywal istniejacego jesli jest utworzony
                 boolean drawed = false;
                 for (Animator anime : animations) {
-                    if (anime.getX() == impediment.getX() && anime.getY() == impediment.getY()) {
+                    if (((Impediment)anime.getObject()).equals(impediment)) {
                         anime.render();
                         drawed = true;
                         break;
                     }
                 }
                 if (!drawed) {
-                    Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip);
+                    Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip, impediment.getDirection()*180, impediment);
                     animations.add(tmp);
                     tmp.render();
                 }
 //                Log.d("ganerator(anime)", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
             }
+
         }
         Rocket rocket = game.getRocket();
         batch.draw(rocket.getImage().getTexture(), rocket.getX(), rocket.getY());       // rysowanie rakiety
