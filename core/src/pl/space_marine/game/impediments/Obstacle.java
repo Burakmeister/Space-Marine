@@ -1,8 +1,7 @@
 package pl.space_marine.game.impediments;
 
 import pl.space_marine.game.assets.Image;
-import pl.space_marine.game.impediments.Impediment;
-import pl.space_marine.game.impediments.Listener;
+import pl.space_marine.game.listener.Listener;
 
 public abstract class Obstacle extends Impediment {
     protected boolean isTransparent;

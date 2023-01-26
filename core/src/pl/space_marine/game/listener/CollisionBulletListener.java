@@ -1,8 +1,9 @@
-package pl.space_marine.game.impediments;
+package pl.space_marine.game.listener;
 
+import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.listener.Listener;
 
-public class CollisionImpedimentListener implements Listener {
+public class CollisionBulletListener implements Listener {
 
     @Override
     public void update(Impediment impediment) {
