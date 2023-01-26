@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class State {
     protected GameStateManager gsm;
-
+    protected Stage stage;
     protected Viewport viewport;
     protected TextButton.TextButtonStyle textButtonStyle;
     protected BitmapFont font;
@@ -28,8 +29,9 @@ public abstract class State {
 //    protected OrthographicCamera cam;
 //    protected Vector3 coords;
 
-    protected State(GameStateManager gsm){
+    protected State(GameStateManager gsm, Stage stage){
         this.gsm = gsm;
+        this.stage = stage;
         this.viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
         font = new BitmapFont();
         skin = new Skin();

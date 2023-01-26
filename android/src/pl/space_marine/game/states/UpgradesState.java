@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 
+import pl.space_marine.game.Renderer;
 import pl.space_marine.game.assets.Image;
 
 public class UpgradesState extends State {
-    private Stage stage;
     private Table table;
 
 
@@ -58,8 +58,8 @@ public class UpgradesState extends State {
     private int boosterLv;
     // pieniądze
     private int playerMoney;
-    protected UpgradesState(GameStateManager gsm) {
-        super(gsm);
+    protected UpgradesState(GameStateManager gsm, Stage stage) {
+        super(gsm, stage);
 
         makeUpgradesComponents();
 
@@ -168,7 +168,7 @@ public class UpgradesState extends State {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("Button Pressed");
-                gsm.set(new MenuState(gsm));
+                gsm.set(new MenuState(gsm, stage));
             }
         });
         nextButton = new TextButton("Next Flight", this.setButton());
@@ -176,7 +176,7 @@ public class UpgradesState extends State {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("Button Pressed");
-                gsm.set(new PlayState(gsm));
+                gsm.set(new Renderer(gsm, stage));
             }
         });
 
