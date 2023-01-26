@@ -13,12 +13,24 @@ public enum Image {
 
     // pociski
 
-    //przeszkody
+    // przeszkody
     BIRD("bird.png"),
     DRAGON("dragon.png"),
     CLOUD("clouds.png"),
-    METHEOR("metheor.png")
-    ;
+    METHEOR("metheor.png"),
+
+    // tło
+
+    BACKGROUND("bg.jpg"),
+
+    // ulepszenia
+    ENGINE("jet_engine.png"),
+    FUEL_TANK("fuel_tank.png"),
+    GUN("heavy gun.png"),
+    AVIONICS("avionics.png"),
+    BOOSTER("booster.png");
+
+
 
     private final Texture texture;
 
