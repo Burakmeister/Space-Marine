@@ -40,6 +40,7 @@ public enum Image {
     DRONE("drone_scale.png", Direction.NONE, 1 , 4),
     UFO("ufo_scale.png", Direction.NONE);
     private final Texture texture;
+    private final String name;
     private Direction direction;
     private int rows, cols;
     private Image(String source, Direction dir, int rows, int cols){
@@ -47,12 +48,14 @@ public enum Image {
         this.rows=rows;
         this.cols=cols;
         this.direction = dir;
+        this.name = source.substring(0,source.length()-4);
     }
     private Image(String source, Direction dir){
         this.texture = new Texture(Gdx.files.internal(source));
         this.rows=1;
         this.cols=1;
         this.direction = dir;
+        this.name = source.substring(0,source.length()-4);
     }
     public Texture getTexture(){
         return this.texture;
@@ -67,5 +70,10 @@ public enum Image {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public String getName() {
+        System.out.println(name);
+        return name;
     }
 }

@@ -18,8 +18,6 @@ import pl.space_marine.game.assets.Image;
 
 public class MenuState extends State {
     private Texture background;
-//    private TextureRegion mainBackground;
-//    private Stage stage;
     private Table table;
     private TextButton playButton;
     private TextButton highScoreButton;
@@ -30,7 +28,8 @@ public class MenuState extends State {
         com.badlogic.gdx.scenes.scene2d.ui.Image backgroundImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(background);
         table = new Table();
         table.setFillParent(true);
-        this.stage = new Stage(viewport);
+        Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
+        this.stage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4));
 //        this.stage.setViewport();
         Gdx.input.setInputProcessor(this.stage);
 

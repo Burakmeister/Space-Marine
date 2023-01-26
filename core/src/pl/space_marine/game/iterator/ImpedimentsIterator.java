@@ -31,14 +31,34 @@ public class ImpedimentsIterator<Impediment> implements Iterator<Impediment> {
         if(cursor>=0 && cursor<list.size())
             this.list.remove(cursor);
     }
+
+    public void remove(Object obj){
+        if(obj instanceof pl.space_marine.game.impediments.Impediment){
+            list.remove(obj);
+        }
+    }
     public void add(Impediment impediment){
         this.list.add(impediment);
     }
 
     public void refreshCursor(){
-        this.cursor=0;
+        this.cursor=-1;
     }
     public boolean isEmpty(){
         return list.isEmpty();
     }
+    public void join(ImpedimentsIterator it){
+        if(it!=null){
+            it.refreshCursor();
+            while(it.hasNext()){
+                this.add((Impediment) it.next());
+            }
+        }
+    }
+
+    public void clear(){
+        cursor = -1;
+        this.list.clear();
+    }
+
 }
