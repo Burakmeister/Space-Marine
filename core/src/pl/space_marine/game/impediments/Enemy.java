@@ -11,8 +11,8 @@ public abstract class Enemy extends Impediment {
     protected List<Bullet> bullets;
     protected float bulletDamage;
 
-    public Enemy(Image image, Listener[] listeners, float collisionDamage, float direction, int speed, int x, int y) {
-        super(image, listeners, collisionDamage, direction, speed, x, y);
+    public Enemy(Image image, Listener listener, float collisionDamage, float direction, int speed, int x, int y) {
+        super(image, listener, collisionDamage, direction, speed, x, y);
     }
 
     public void attack(Rocket rocket){
