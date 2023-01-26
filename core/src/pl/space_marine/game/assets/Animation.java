@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import jdk.internal.org.jline.utils.Log;
 
 
-public enum Animation {
+public enum Animation{
     BIRD("bird.png", 3, 4),
     ENGINE_FIRE("engine_fire.png", 2, 2);
 

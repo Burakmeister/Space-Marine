@@ -1,4 +1,4 @@
-package pl.space_marine.game.impediments.enemies;
+package pl.space_marine.game.impediments;
 
 import java.util.List;
 

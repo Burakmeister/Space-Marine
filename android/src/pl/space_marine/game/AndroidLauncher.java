@@ -1,11 +1,22 @@
 package pl.space_marine.game;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 public class AndroidLauncher extends AndroidApplication {
+//	public final static int SCREEN_WIDTH;
+//	public final static int SCREEN_HEIGHT;
+//
+//	public AndroidLauncher(){
+//		DisplayMetrics displayMetrics = new DisplayMetrics();
+//		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//		SCREEN_HEIGHT = displayMetrics.heightPixels;
+//		SCREEN_WIDTH = displayMetrics.widthPixels;
+//	}
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

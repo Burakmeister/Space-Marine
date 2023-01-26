@@ -8,15 +8,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animator{
+    private Object object;
     private int x, y;
+    private float rotation = 0;
     private float scale = 1f;
+    private boolean flip = false;
     private Animation<TextureRegion> animation;
-    private pl.space_marine.game.assets.Animation anime;
+    private pl.space_marine.game.assets.Image anime;
     private SpriteBatch batch;
 
     float stateTime;
 
-    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Animation animation, int x, int y){
+    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y){
         this.anime = animation;
         this.x = x;
         this.y = y;
@@ -24,24 +27,27 @@ public class Animator{
         this.create();
     }
 
-    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Animation animation, int x, int y, float scale){
+    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y, boolean flip, float rotation, Object obj){
         this.anime = animation;
-        this.scale = scale;
         this.x = x;
         this.y = y;
         this.batch = batch;
+        this.flip = flip;
+        this.rotation = rotation;
+        this.object = obj;
         this.create();
     }
 
     public void render() {
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
         stateTime+=Gdx.graphics.getDeltaTime();
-
         TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
         int width, height;
         width = this.anime.getTexture().getWidth()/this.anime.getCols();
         height = this.anime.getTexture().getHeight()/this.anime.getRows();
-        batch.draw(currentFrame, x, y, width*scale, height*scale);
+        batch.draw(currentFrame, x, y,
+                (flip ? -1 : 1)*width*scale, height*scale,
+                width, height,
+                1f, 1f, rotation);
     }
 
     public void dispose() {
@@ -53,6 +59,26 @@ public class Animator{
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public Object getObject() {
+        return object;
     }
 
     private void create(){
@@ -67,7 +93,7 @@ public class Animator{
                 frames[idx++] = tmp[i][j];
             }
         }
-        this.animation = new Animation<>(0.025f, frames);
+        this.animation = new Animation<>(0.1f, frames);
         stateTime = 0;
     }
 }
