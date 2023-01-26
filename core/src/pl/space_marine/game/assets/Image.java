@@ -15,6 +15,17 @@ public enum Image {
 
     // pociski
 
+    // tło
+
+    BACKGROUND("bg.jpg", Direction.NONE),
+
+    // ulepszenia
+    ENGINE("jet_engine.png", Direction.NONE),
+    FUEL_TANK("fuel_tank.png", Direction.NONE),
+    GUN("heavy gun.png", Direction.NONE),
+    AVIONICS("avionics.png", Direction.NONE),
+    BOOSTER("booster.png", Direction.NONE),
+
     //przeszkody
     BIRD("bird_scale.png", Direction.LEFT, 3, 4),
     DRAGON("dragon_scale.png", Direction.NONE, 1, 3),
@@ -28,7 +39,6 @@ public enum Image {
     SATELLITE("satellite_scale.png", Direction.NONE),
     DRONE("drone_scale.png", Direction.NONE, 1 , 4),
     UFO("ufo_scale.png", Direction.NONE);
-
     private final Texture texture;
     private Direction direction;
     private int rows, cols;

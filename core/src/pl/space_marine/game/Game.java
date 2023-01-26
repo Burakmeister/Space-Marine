@@ -2,6 +2,7 @@ package pl.space_marine.game;
 
 import com.badlogic.gdx.Gdx;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import pl.space_marine.game.builder.Builder;
@@ -13,7 +14,7 @@ import pl.space_marine.game.rocket.Rocket;
 public class Game {
     public static final int SCREEN_WIDTH = Gdx.graphics.getWidth();
     public static final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
-    public static final int HEIGHT_BETWEEN_IMPEDIMENTS = 300;
+    public static final int HEIGHT_BETWEEN_IMPEDIMENTS = 100;
 
     private Builder builder;
     private ImpedimentsIterator iterator;
@@ -110,7 +111,14 @@ public class Game {
             iterator = this.builder.getResult();
         }
         iterator.refreshCursor();
+        moveImpediments(iterator);
         return iterator;
+    }
+
+    private void moveImpediments(ImpedimentsIterator iterator){
+        for(; iterator.hasNext();){
+            break;
+        }
     }
 
     public Rocket getRocket() {
