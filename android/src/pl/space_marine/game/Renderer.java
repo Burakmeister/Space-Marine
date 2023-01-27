@@ -128,6 +128,7 @@ public class Renderer extends State {
     public void render(SpriteBatch sb) {
         camera.update();
         sb.setProjectionMatrix(camera.combined);
+        camera.position.set(rocket.getX(), rocket.getY() + (Gdx.graphics.getHeight() / 2) , 0); //Ezunia its me bartolomeo
         sb.begin();
         next();
         int i=0;
@@ -149,7 +150,7 @@ public class Renderer extends State {
         rocket.setX((int) vec.x);
         rocket.setY((int) vec.y);
         rocketBody.setTransform(vec, (float) (rocket.getOrientation()*Math.PI/180));
-
+        camera.update();// Ezunia its me bartolomeo
         sb.draw(rocket.getImage().getTexture(),
                 rocket.getX(), rocket.getY(),
                 rocket.getImage().getTexture().getWidth() / 2,
