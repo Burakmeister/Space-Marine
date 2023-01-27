@@ -88,6 +88,7 @@ public class Renderer extends State {
 //        sprite.setPosition(meteor.getX(), meteor.getY());
 //        stage.addActor(returnButton);
         Body body = bodiesCache.createBody(rocket.getImage().getName(), world, 1, 1);
+        body.setGravityScale(-50);
         body.setTransform(rocket.getX(), rocket.getY(), 0);
         this.rocketBody = body;
 //        for(int i=0; i<20; i++)
@@ -199,7 +200,7 @@ public class Renderer extends State {
                 }
             }
             if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {
-                Sprite spr = new Sprite(impediment.getImage().getTexture(), impediment.getX(), impediment.getY());
+                Sprite spr = new Sprite(impediment.getImage().getTexture(), impediment.getImage().getTexture().getWidth(), impediment.getImage().getTexture().getHeight());
                 spr.setFlip(flip, false);
                 sprites.add(spr);
                 bodies.add(bodiesCache.createBody(impediment.getImage().getName(), world, 1, 1));
