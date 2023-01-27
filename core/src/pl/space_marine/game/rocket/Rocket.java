@@ -21,7 +21,7 @@ public class Rocket {
 
     // listy: pociski i człony
     private List<Bullet> bullets;
-    private List<Stage> stages;
+    private Stage[] stages;
 
     // dane użytkownika: stan konta i rekord
     private int accountBalance = 0;
@@ -37,14 +37,14 @@ public class Rocket {
 
     private Rocket(){
         this.bullets = new ArrayList<>();
-        this.stages = new ArrayList<>();
+        this.stages = new Stage[]{
+                new Engine(),
+                new Avionic(),
+                new Booster(),
+                new Tank(),
+                new Gun()
+        };
         this.image = Image.ROCKET;
-
-        stages.add(new Engine());
-        stages.add(new Avionic());
-        stages.add(new Booster());
-        stages.add(new Tank());
-        stages.add(new Gun());
     }
 
     public static Rocket getInstance(){
@@ -88,7 +88,7 @@ public class Rocket {
         this.accountBalance = accountBalance;
     }
 
-    public List<Stage> getStages() {
+    public Stage[] getStages() {
         return stages;
     }
 }

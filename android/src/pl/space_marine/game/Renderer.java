@@ -13,8 +13,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Iterator;
-
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
@@ -22,8 +20,10 @@ import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
 import pl.space_marine.game.rocket.Rocket;
+import pl.space_marine.game.rocket.stages.RocketBuilder;
 import pl.space_marine.game.states.GameStateManager;
 import pl.space_marine.game.states.State;
+import pl.space_marine.game.states.UpgradesState;
 
 
 public class Renderer extends State {
@@ -46,6 +46,7 @@ public class Renderer extends State {
     private ImpedimentsIterator iterator;
 
     private boolean beforeStart = false;
+    private RocketBuilder rocketBuilder;
 
     public Renderer(GameStateManager gsm, Stage stage) {
         super(gsm, stage);
@@ -55,16 +56,17 @@ public class Renderer extends State {
         this.rocket = game.getRocket();
         this.sprites = new Array<>();
         this.bodies = new Array<>();
+        this.rocketBuilder = new RocketBuilder(this.rocket);
         iterator = new ImpedimentsIterator();
 
         rocket.setX(Gdx.graphics.getWidth() / 2 - Image.ROCKET.getTexture().getWidth() / 2);
         rocket.setY(0);
         camera = new OrthographicCamera(1600, 3200);
-        camera.position.set(this.rocket.getX(), this.rocket.getY(), 0);
-        camera.update();
-
+        camera.position.set(rocket.getX(), rocket.getY() + (Gdx.graphics.getHeight() - 2*rocket.getImage().getTexture().getHeight()), 0);
         viewport = new ExtendViewport(800, 600, camera);
         stage.setViewport(viewport);
+        camera.update();
+
 
 
         Gdx.input.setInputProcessor(this.stage);
@@ -116,7 +118,14 @@ public class Renderer extends State {
                 rocket.setOrientation(rotation);
             }
         }
-
+        if(Gdx.input.isTouched()) {
+            gsm.set(new UpgradesState(gsm, stage, rocket));
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -126,8 +135,10 @@ public class Renderer extends State {
 
     @Override
     public void render(SpriteBatch sb) {
+        rocketBuilder.addStages();
         camera.update();
         sb.setProjectionMatrix(camera.combined);
+        camera.position.set(rocket.getX(), rocket.getY() + (Gdx.graphics.getHeight() - 2*rocket.getImage().getTexture().getHeight()) , 0); //Ezunia its me bartolomeo
         sb.begin();
         next();
         int i=0;
@@ -145,24 +156,31 @@ public class Renderer extends State {
             }
             i++;
         }
+        rocket.setX((int) rocketBody.getPosition().x);
+        rocket.setY((int) rocketBody.getPosition().y);
+        rocketBuilder.update();
+        for (Sprite sprite:rocketBuilder.getSprites()) {
+            sprite.setRotation(rocket.getOrientation());
+            sprite.draw(sb);
+        }
         Vector2 vec = rocketBody.getPosition();
         rocket.setX((int) vec.x);
         rocket.setY((int) vec.y);
         rocketBody.setTransform(vec, (float) (rocket.getOrientation()*Math.PI/180));
-
-        sb.draw(rocket.getImage().getTexture(),
-                rocket.getX(), rocket.getY(),
-                rocket.getImage().getTexture().getWidth() / 2,
-                rocket.getImage().getTexture().getHeight() / 2,
-                rocket.getImage().getTexture().getWidth(),
-                rocket.getImage().getTexture().getHeight(),
-                1, 1, rocket.getOrientation(),
-                0,
-                0,
-                rocket.getImage().getTexture().getWidth(),
-                rocket.getImage().getTexture().getHeight(),
-                false, false
-        );
+        camera.update();// Ezunia its me bartolomeo
+//        sb.draw(rocket.getImage().getTexture(),
+//                rocket.getX(), rocket.getY(),
+//                rocket.getImage().getTexture().getWidth() / 2,
+//                rocket.getImage().getTexture().getHeight() / 2,
+//                rocket.getImage().getTexture().getWidth(),
+//                rocket.getImage().getTexture().getHeight(),
+//                1, 1, rocket.getOrientation(),
+//                0,
+//                0,
+//                rocket.getImage().getTexture().getWidth(),
+//                rocket.getImage().getTexture().getHeight(),
+//                false, false
+//        );
         sb.end();
         debugRenderer.render(world, camera.combined);
         stage.draw();

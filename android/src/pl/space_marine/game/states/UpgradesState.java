@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 import pl.space_marine.game.Renderer;
 import pl.space_marine.game.assets.Image;
@@ -33,11 +34,15 @@ public class UpgradesState extends State {
     private final Label boosterText = new Label("Booster",this.setLabel());
     private final Label avionicsText = new Label("Avionics",this.setLabel());
     private final Label gunText = new Label("Gun",this.setLabel());
-
     private final Rocket rocket;
     public UpgradesState(GameStateManager gsm, Stage stage, Rocket rocket) {
         super(gsm, stage);
         this.rocket = rocket;
+//        stage.getViewport().setWorldSize(stage.getCamera().viewportWidth, stage.getCamera().viewportHeight);
+//        stage.getViewport().setScreenSize((int) stage.getCamera().viewportWidth, (int) stage.getCamera().viewportHeight);
+//        stage.getCamera().viewportHeight
+        this.stage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4));
+//        stage.setViewport((new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4)));
         makeUpgradesComponents();
     }
 
@@ -64,7 +69,7 @@ public class UpgradesState extends State {
         com.badlogic.gdx.scenes.scene2d.ui.Image engineImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(engineTex);
         engineImage.setScaling(Scaling.fit);
         // etykiety ulepszeń
-        Label engineLvlable = new Label("Level " + rocket.getStages().get(0).getLevel() + ".", this.setLabel());
+        Label engineLvlable = new Label("Level " + rocket.getStages()[0].getLevel() + ".", this.setLabel());
         engineLvlable.setAlignment(Align.center);
         engineText.setAlignment(Align.center);
         upEngineBtn = new TextButton("Upgrade", this.setButton());
@@ -74,7 +79,7 @@ public class UpgradesState extends State {
         Texture tankTex = Image.FUEL_TANK.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image tankImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(tankTex);
         tankImage.setScaling(Scaling.fit);
-        Label tankLvlable = new Label("Level " + rocket.getStages().get(3).getLevel() + ".", this.setLabel());
+        Label tankLvlable = new Label("Level " + rocket.getStages()[3].getLevel() + ".", this.setLabel());
         tankLvlable.setAlignment(Align.center);
         tankText.setAlignment(Align.center);
         upTankBtn = new TextButton("Upgrade", this.setButton());
@@ -83,7 +88,7 @@ public class UpgradesState extends State {
         Texture avionicsTex = Image.AVIONICS.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image avionicsImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(avionicsTex);
         avionicsImage.setScaling(Scaling.fit);
-        Label avionicsLvlable = new Label("Level " + rocket.getStages().get(1).getLevel() + ".", this.setLabel());
+        Label avionicsLvlable = new Label("Level " + rocket.getStages()[1].getLevel() + ".", this.setLabel());
         avionicsLvlable.setAlignment(Align.center);
         avionicsText.setAlignment(Align.center);
         upAvionicsBtn = new TextButton("Upgrade", this.setButton());
@@ -92,7 +97,7 @@ public class UpgradesState extends State {
         Texture gunTex = Image.GUN.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image gunImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(gunTex);
         gunImage.setScaling(Scaling.fit);
-        Label gunLvlable = new Label("Level " + rocket.getStages().get(4).getLevel() + ".", this.setLabel());
+        Label gunLvlable = new Label("Level " + rocket.getStages()[4].getLevel() + ".", this.setLabel());
         gunLvlable.setAlignment(Align.center);
         gunText.setAlignment(Align.center);
         upGunBtn = new TextButton("Upgrade", this.setButton());
@@ -101,7 +106,7 @@ public class UpgradesState extends State {
         Texture boosterTex = Image.BOOSTER.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image boosterImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(boosterTex);
         boosterImage.setScaling(Scaling.fit);
-        Label boosterLvlable = new Label("Level " + rocket.getStages().get(2).getLevel() + ".", this.setLabel());
+        Label boosterLvlable = new Label("Level " + rocket.getStages()[2].getLevel() + ".", this.setLabel());
         boosterLvlable.setAlignment(Align.center);
         boosterText.setAlignment(Align.center);
         upBoosterBtn = new TextButton("Upgrade", this.setButton());
@@ -153,8 +158,8 @@ public class UpgradesState extends State {
         upEngineBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                rocket.getStages().get(0).incrementLevel();
-                System.out.println("ulepszono" + rocket.getStages().get(0).toString());
+                rocket.getStages()[0].incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages()[0].toString());
                 revalidateTable();
             }
         });
@@ -162,8 +167,8 @@ public class UpgradesState extends State {
         upTankBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                rocket.getStages().get(3).incrementLevel();
-                System.out.println("ulepszono" + rocket.getStages().get(3).toString());
+                rocket.getStages()[3].incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages()[3].toString());
                 revalidateTable();
             }
         });
@@ -171,8 +176,8 @@ public class UpgradesState extends State {
         upAvionicsBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                rocket.getStages().get(1).incrementLevel();
-                System.out.println("ulepszono" + rocket.getStages().get(1).toString());
+                rocket.getStages()[1].incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages()[1].toString());
                 revalidateTable();
             }
         });
@@ -180,8 +185,8 @@ public class UpgradesState extends State {
         upGunBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                rocket.getStages().get(4).incrementLevel();
-                System.out.println("ulepszono" + rocket.getStages().get(4).toString());
+                rocket.getStages()[4].incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages()[4].toString());
                 revalidateTable();
             }
         });
@@ -189,8 +194,8 @@ public class UpgradesState extends State {
         upBoosterBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                rocket.getStages().get(2).incrementLevel();
-                System.out.println("ulepszono" + rocket.getStages().get(2).toString());
+                rocket.getStages()[2].incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages()[2].toString());
                 revalidateTable();
             }
         });
