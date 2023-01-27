@@ -14,10 +14,16 @@ import com.badlogic.gdx.utils.Scaling;
 
 import pl.space_marine.game.Renderer;
 import pl.space_marine.game.assets.Image;
+import pl.space_marine.game.rocket.Rocket;
+import pl.space_marine.game.rocket.stages.Avionic;
+import pl.space_marine.game.rocket.stages.Booster;
+import pl.space_marine.game.rocket.stages.Engine;
+import pl.space_marine.game.rocket.stages.Gun;
+import pl.space_marine.game.rocket.stages.Tank;
 
 public class UpgradesState extends State {
     private Table table;
-
+//    private Table table;
 
     private TextButton returnButton;
     private TextButton nextButton;
@@ -56,11 +62,11 @@ public class UpgradesState extends State {
     private int avionicsLv;
     private int gunLv;
     private int boosterLv;
-    // pieniądze
-    private int playerMoney;
-    protected UpgradesState(GameStateManager gsm, Stage stage) {
-        super(gsm, stage);
 
+    private Rocket rocket;
+    public UpgradesState(GameStateManager gsm, Stage stage, Rocket rocket) {
+        super(gsm, stage);
+        this.rocket = rocket;
         makeUpgradesComponents();
 
 
@@ -68,17 +74,24 @@ public class UpgradesState extends State {
     }
 
     public void makeUpgradesComponents() {
+
         table = new Table();
         table.setFillParent(true);
-        stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
 
+//        upgradesTable.setPosition(0,0);
         table.setPosition(0,0);
-//        table.setDebug(true);
-        table.defaults().width((float) (viewport.getWorldWidth()/3.5));
-        table.align(Align.center);
+        table.setDebug(true);
+//        upgradesTable.setDebug(true);
+//        table.defaults().width((float) (Gdx.graphics.getWidth()/3.5));  //  viewport.getWorldWidth()/3.5
+//        upgradesTable.align(Align.center);
+//        viewTable.align(Align.center);
 
-        populateTable(1,1,1,1,1,1000);
+
+
+        populateTable(1,1,1,1,1,rocket.getAccountBalance());
+//        upgradesTable.pack();
+//        viewTable.add(upgradesTable);
         table.pack();
         stage.addActor(table);
     }
@@ -89,7 +102,7 @@ public class UpgradesState extends State {
         this.gunLv = gunLevel;
         this.avionicsLv = avionicsLevel;
         this.tankLv = tankLevel;
-        this.playerMoney = playerMoney;
+//        this.playerMoney = playerMoney;
         viewlable = new Label("Upgrades",this.setLabel());
         viewlable.setAlignment(Align.center);
 //        engine row
@@ -103,7 +116,19 @@ public class UpgradesState extends State {
         upEngineBtn.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("not coded yet -- upEngineBtn");
+                boolean isStageAdded = false;
+                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
+                    if (stage instanceof Engine) {
+                        stage.incrementLevel();
+                        engineLv++;
+                        isStageAdded = true;
+                        System.out.println("ulepszono");
+                    }
+                }
+                if (!isStageAdded) {
+                    rocket.getStages().add(new Engine());
+                    System.out.println("dodano silnik");
+                }
             }
         });
 //        tank row
@@ -117,7 +142,20 @@ public class UpgradesState extends State {
         upTankBtn.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("not coded yet -- upTankBtn");
+                boolean isStageAdded = false;
+                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
+                    if (stage instanceof Tank) {
+                        stage.incrementLevel();
+                        tankLv++;
+                        isStageAdded = true;
+                        System.out.println("ulepszono");
+                    }
+                }
+                if (!isStageAdded) {
+                    rocket.getStages().add(new Tank());
+                    System.out.println("dodano zbiornik");
+                }
+
             }
         });
 //        avionics row
@@ -131,8 +169,19 @@ public class UpgradesState extends State {
         upAvionicsBtn.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-
-                System.out.println("not coded yet -- upAvionicsBtn");
+                boolean isStageAdded = false;
+                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
+                    if (stage instanceof Avionic) {
+                        stage.incrementLevel();
+                        avionicsLv++;
+                        isStageAdded = true;
+                        System.out.println("ulepszono");
+                    }
+                }
+                if (!isStageAdded) {
+                    rocket.getStages().add(new Avionic());
+                    System.out.println("dodano avionic");
+                }
             }
         });
 //        gun row
@@ -146,6 +195,19 @@ public class UpgradesState extends State {
         upGunBtn.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
+                boolean isStageAdded = false;
+                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
+                    if (stage instanceof Gun) {
+                        stage.incrementLevel();
+                        gunLv++;
+                        isStageAdded = true;
+                        System.out.println("ulepszono");
+                    }
+                }
+                if (!isStageAdded) {
+                    rocket.getStages().add(new Gun());
+                    System.out.println("dodano gun");
+                }
                 System.out.println("not coded yet -- upGunBtn");
             }
         });
@@ -160,7 +222,19 @@ public class UpgradesState extends State {
         upBoosterBtn.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("not coded yet -- upBoosterBtn");
+                boolean isStageAdded = false;
+                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
+                    if (stage instanceof Booster) {
+                        stage.incrementLevel();
+                        boosterLv++;
+                        isStageAdded = true;
+                        System.out.println("ulepszono");
+                    }
+                }
+                if (!isStageAdded) {
+                    rocket.getStages().add(new Booster());
+                    System.out.println("dodano booster");
+                }
             }
         });
         returnButton = new TextButton("Return", this.setButton());
@@ -168,6 +242,7 @@ public class UpgradesState extends State {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("Button Pressed");
+                stage.clear();
                 gsm.set(new MenuState(gsm, stage));
             }
         });
@@ -175,7 +250,8 @@ public class UpgradesState extends State {
         nextButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed");
+                System.out.println("Button Pressed1");
+                stage.clear();
                 gsm.set(new Renderer(gsm, stage));
             }
         });
@@ -183,7 +259,11 @@ public class UpgradesState extends State {
         money = new Label("Money: " + playerMoney,this.setLabel());
         money.setAlignment(Align.center);
 
-
+//        upgradesTable.setTransform(true);
+////        upgradesTable.setOrigin(upgradesTable.getWidth()/3,upgradesTable.getHeight()/3);
+//        upgradesTable.moveBy(-upgradesTable.getWidth()/2,-upgradesTable.getHeight()/2);
+////        upgradesTable.setPosition(0, 0);
+//        upgradesTable.setScale(3);
         table.add(viewlable).colspan(3).center().row();
         table.row();
         table.add(engineText).colspan(3).row();
@@ -223,7 +303,7 @@ public class UpgradesState extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-        Gdx.gl.glClearColor(36/255f, 41/255f, 102/255f, 1);
+//        Gdx.gl.glClearColor(36/255f, 41/255f, 102/255f, 1);
         stage.draw();
     }
 

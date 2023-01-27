@@ -19,7 +19,7 @@ public class Rocket {
     private List<Stage> stages;
 
     // dane użytkownika: stan konta i rekord
-    private int accountBalance;
+    private int accountBalance = 0;
     private int record;
 
     // dane rakiet: pozycja i ?armor?
@@ -67,5 +67,17 @@ public class Rocket {
 
     public void setOrientation(float orientation) {
         this.orientation = orientation;
+    }
+
+    public int getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(int accountBalance) {
+        this.accountBalance = accountBalance;
+    }
+
+    public List<Stage> getStages() {
+        return stages;
     }
 }

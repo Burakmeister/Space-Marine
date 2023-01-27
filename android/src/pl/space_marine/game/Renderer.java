@@ -6,10 +6,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
 import java.util.Iterator;
 
 import pl.space_marine.game.assets.Image;
@@ -19,11 +24,13 @@ import pl.space_marine.game.rocket.Rocket;
 import pl.space_marine.game.states.GameStateManager;
 import pl.space_marine.game.states.MenuState;
 import pl.space_marine.game.states.State;
+import pl.space_marine.game.states.UpgradesState;
 
 public class Renderer extends State {
     private Game game;
     private Rocket rocket;
     private TextButton returnButton;
+    private TextButton nextButton;
     private Array<Animator> animations;
 
     public Renderer(GameStateManager gsm, Stage stage){
@@ -33,6 +40,7 @@ public class Renderer extends State {
         this.rocket = game.getRocket();
         rocket.setX(Gdx.graphics.getWidth()/2-Image.ROCKET.getTexture().getWidth()/2);
         rocket.setY(0);
+//        stage.setViewport(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(this.stage);
         returnButton = new TextButton("Return", this.setButton());
 
@@ -40,11 +48,30 @@ public class Renderer extends State {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("Button Pressed");
+                stage.clear();
                 gsm.set(new MenuState(gsm, stage));
             }
         });
 
-        stage.addActor(returnButton);
+        nextButton = new TextButton("Next", this.setButton());
+        nextButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("Button Pressed");
+                stage.clear();
+                gsm.set(new UpgradesState(gsm, stage, rocket));
+            }
+        });
+
+        Table table = new Table();
+        table.setFillParent(true);
+        table.left().top();
+        table.add(returnButton);
+        table.add(nextButton);
+        table.pack();
+
+        stage.addActor(table);
+//        stage.addActor(nextButton);
     }
 
 

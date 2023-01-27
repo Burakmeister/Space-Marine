@@ -30,15 +30,23 @@ public class MenuState extends State {
         com.badlogic.gdx.scenes.scene2d.ui.Image backgroundImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(background);
         table = new Table();
         table.setFillParent(true);
+        Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
         this.stage = new Stage(viewport);
-//        this.stage.setViewport();
+//        this.stage = new Stage();
+//        this.stage.setViewport(viewport);
         Gdx.input.setInputProcessor(this.stage);
 
         playButton = new TextButton("Play", this.setButton());
+//        playButton.setTransform(true);
+//        playButton.setOrigin(playButton.getWidth(),playButton.getHeight());
+//        playButton.moveBy(playButton.getWidth(),playButton.getHeight());
+//        playButton.setScale(2);
+
+//        table.setScale(2);
         highScoreButton = new TextButton("High Score", this.setButton());
 
         table.setDebug(true);
-        table.setPosition(0,0);
+//        table.setPosition(0,0);
         table.align(Align.center);
 
         table.defaults().width(100);
@@ -47,6 +55,7 @@ public class MenuState extends State {
         table.add(highScoreButton);
         table.pack();
         backgroundImage.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
+//        backgroundImage.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());    //   viewport.getWorldWidth(), viewport.getWorldHeight()
         this.stage.addActor(backgroundImage);
         this.stage.addActor(table);
 
@@ -55,6 +64,7 @@ public class MenuState extends State {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("Button Pressed");
+                stage.clear();
                 gsm.set(new Renderer(gsm, stage));
             }
         });
