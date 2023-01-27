@@ -1,6 +1,8 @@
-package pl.space_marine.game.impediments;
+package pl.space_marine.game.listener;
 
-import pl.space_marine.game.rocket.Rocket;
+import pl.space_marine.game.impediments.CollisionType;
+import pl.space_marine.game.impediments.Impediment;
+import pl.space_marine.game.listener.Listener;
 
 public class CollisionListener implements Listener {
     @Override

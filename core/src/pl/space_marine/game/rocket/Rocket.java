@@ -61,4 +61,11 @@ public class Rocket {
     }
 
 
+    public float getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(float orientation) {
+        this.orientation = orientation;
+    }
 }

@@ -2,7 +2,7 @@ package pl.space_marine.game.impediments;
 
 
 import pl.space_marine.game.assets.Image;
-import pl.space_marine.game.rocket.Rocket;
+import pl.space_marine.game.listener.Listener;
 
 public abstract class Impediment {
     // abstrakcyjna klasa przeszkody/przeciwnika
@@ -12,7 +12,7 @@ public abstract class Impediment {
 
     protected float collisionDamage;    // obrażenia zadane podczas zderzenia z graczem
     protected float HP = 1;             // zdrowie przeszkody
-    protected float direction;          // kierunek
+    protected float direction;          // kierunek radiany bez pi 0 - w gore
     protected int speed;
     protected int x;
     protected int y;
@@ -21,7 +21,7 @@ public abstract class Impediment {
 
     public Impediment(Image image, Listener listener, float collisionDamage, float direction, int speed, int x, int y){
         this.collisionDamage = collisionDamage;
-        this.texture = texture;
+        this.texture = image;
         this.listener = listener;
         this.direction = direction;
         this.speed = speed;
@@ -54,5 +54,28 @@ public abstract class Impediment {
 
     public void draw(){
 
+    }
+
+    public Image getImage() {
+        return texture;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+    public float getDirection() {
+        return direction;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }

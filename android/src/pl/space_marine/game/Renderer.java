@@ -1,45 +1,101 @@
 package pl.space_marine.game;
 
-import android.util.DisplayMetrics;
-import android.util.Log;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-
 import java.util.Iterator;
 
-import pl.space_marine.game.assets.Animation;
-import pl.space_marine.game.Renderer;
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
 import pl.space_marine.game.rocket.Rocket;
+import pl.space_marine.game.states.GameStateManager;
+import pl.space_marine.game.states.MenuState;
+import pl.space_marine.game.states.State;
 
-public class Renderer extends ApplicationAdapter {
+public class Renderer extends State {
     private Game game;
-    private SpriteBatch batch;
-
-
+    private Rocket rocket;
+    private TextButton returnButton;
     private Array<Animator> animations;
 
-    @Override
-    public void create() {
+    public Renderer(GameStateManager gsm, Stage stage){
+        super(gsm, stage);
         this.game = new Game();
-
-        this.batch = new SpriteBatch();
         animations = new Array<>();
+        this.rocket = game.getRocket();
+        rocket.setX(Gdx.graphics.getWidth()/2-Image.ROCKET.getTexture().getWidth()/2);
+        rocket.setY(0);
+        Gdx.input.setInputProcessor(this.stage);
+        returnButton = new TextButton("Return", this.setButton());
+
+        returnButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("Button Pressed");
+                gsm.set(new MenuState(gsm, stage));
+            }
+        });
+
+        stage.addActor(returnButton);
+    }
+
+
+    @Override
+    public void handleInput() {
+        float rotation = rocket.getOrientation();
+        if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
+            // Get the current accelerometer values
+            float x = Gdx.input.getAccelerometerX();
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if ((int) x > 0 && rotation < 45) {
+                rotation += 5;
+                rocket.setOrientation(rotation);
+            } else if ((int) x < 0 && rotation > -45) {
+                rotation -= 5;
+                rocket.setOrientation(rotation);
+            }
+        }
+
     }
 
     @Override
-    public void render() {
-        ScreenUtils.clear(0.2f, 0.2f, 0.4f, 1);
-        this.batch.begin();
-        draw();
-        this.batch.end();
+    public void update(float dt) {
+        //nie chcem
+        handleInput();
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.begin();
+        draw(sb);
+        sb.draw(rocket.getImage().getTexture(),
+                rocket.getX(), rocket.getY(),
+                rocket.getImage().getTexture().getWidth()/2,
+                rocket.getImage().getTexture().getHeight()/2,
+                rocket.getImage().getTexture().getWidth(),
+                rocket.getImage().getTexture().getHeight(),
+                1,1,rocket.getOrientation(),
+                0,
+                0,
+                rocket.getImage().getTexture().getWidth(),
+                rocket.getImage().getTexture().getHeight(),
+                false, false
+        );
+        sb.end();
+        stage.draw();
     }
 
     @Override
@@ -47,10 +103,9 @@ public class Renderer extends ApplicationAdapter {
         for (Animator a : animations) {
             a.dispose();
         }
-        batch.dispose();
     }
 
-    public void draw() {
+    public void draw(SpriteBatch batch) {
         ImpedimentsIterator list = game.drawImpediments();  //pobieram iterator impedimentów z game
         for (Iterator it = list; it.hasNext(); ) {          // pętla z iteratorem
             Impediment impediment = (Impediment) it.next();
@@ -69,29 +124,42 @@ public class Renderer extends ApplicationAdapter {
             }
 
             if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {         // jesli obrazek nie jest animowany to po prostu rysuje
+                //	public void draw (Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX,
+                //		float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY);
+
                     batch.draw(impediment.getImage().getTexture(),
                             impediment.getX(), impediment.getY(),
-                            (flip ? -1 : 1)*impediment.getImage().getTexture().getWidth(), impediment.getImage().getTexture().getHeight());
+                            impediment.getImage().getTexture().getWidth()/2,
+                            impediment.getImage().getTexture().getHeight()/2,
+                            impediment.getImage().getTexture().getWidth(),
+                            impediment.getImage().getTexture().getHeight(),
+                            1,
+                            1,
+                            impediment.getDirection()*180,
+                            0,
+                            0,
+                            impediment.getImage().getTexture().getWidth(),
+                            impediment.getImage().getTexture().getHeight(),
+                            flip, false
+                            );
 //                Log.d("ganerator", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
             } else {                                                                                    // w innym wypadku tworze Animator albo uzywal istniejacego jesli jest utworzony
                 boolean drawed = false;
                 for (Animator anime : animations) {
-                    if (anime.getX() == impediment.getX() && anime.getY() == impediment.getY()) {
+                    if (((Impediment)anime.getObject()).equals(impediment)) {
                         anime.render();
                         drawed = true;
                         break;
                     }
                 }
                 if (!drawed) {
-                    Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip);
+                    Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip, impediment.getDirection()*180, impediment);
                     animations.add(tmp);
                     tmp.render();
                 }
 //                Log.d("ganerator(anime)", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
             }
+
         }
-        Rocket rocket = game.getRocket();
-        batch.draw(rocket.getImage().getTexture(), rocket.getX(), rocket.getY());       // rysowanie rakiety
-//        rocket.setY(rocket.getY() + 1);
     }
 }
