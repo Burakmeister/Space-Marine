@@ -1,6 +1,5 @@
 package pl.space_marine.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,10 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Iterator;
 
@@ -27,9 +22,9 @@ import pl.space_marine.game.states.State;
 import pl.space_marine.game.states.UpgradesState;
 
 public class Renderer extends State {
-    private Game game;
-    private Rocket rocket;
-    private TextButton returnButton;
+    private final Game game;
+    private final Rocket rocket;
+    private final TextButton returnButton;
     private TextButton nextButton;
     private Array<Animator> animations;
 
@@ -40,7 +35,6 @@ public class Renderer extends State {
         this.rocket = game.getRocket();
         rocket.setX(Gdx.graphics.getWidth()/2-Image.ROCKET.getTexture().getWidth()/2);
         rocket.setY(0);
-//        stage.setViewport(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(this.stage);
         returnButton = new TextButton("Return", this.setButton());
 
@@ -71,7 +65,6 @@ public class Renderer extends State {
         table.pack();
 
         stage.addActor(table);
-//        stage.addActor(nextButton);
     }
 
 
@@ -121,6 +114,19 @@ public class Renderer extends State {
                 rocket.getImage().getTexture().getHeight(),
                 false, false
         );
+        sb.draw(rocket.getImage().getTexture(),
+                rocket.getX(), rocket.getY(),
+                rocket.getImage().getTexture().getWidth()/2,
+                rocket.getImage().getTexture().getHeight()/2,
+                rocket.getImage().getTexture().getWidth(),
+                rocket.getImage().getTexture().getHeight(),
+                1,1,rocket.getOrientation(),
+                0,
+                0,
+                rocket.getImage().getTexture().getWidth(),
+                rocket.getImage().getTexture().getHeight(),
+                false, false
+        );
         sb.end();
         stage.draw();
     }
@@ -151,9 +157,6 @@ public class Renderer extends State {
             }
 
             if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {         // jesli obrazek nie jest animowany to po prostu rysuje
-                //	public void draw (Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX,
-                //		float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY);
-
                     batch.draw(impediment.getImage().getTexture(),
                             impediment.getX(), impediment.getY(),
                             impediment.getImage().getTexture().getWidth()/2,
@@ -169,7 +172,6 @@ public class Renderer extends State {
                             impediment.getImage().getTexture().getHeight(),
                             flip, false
                             );
-//                Log.d("ganerator", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
             } else {                                                                                    // w innym wypadku tworze Animator albo uzywal istniejacego jesli jest utworzony
                 boolean drawed = false;
                 for (Animator anime : animations) {
@@ -184,7 +186,6 @@ public class Renderer extends State {
                     animations.add(tmp);
                     tmp.render();
                 }
-//                Log.d("ganerator(anime)", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
             }
 
         }

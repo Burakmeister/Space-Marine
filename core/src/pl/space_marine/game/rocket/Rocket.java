@@ -8,7 +8,12 @@ import java.util.List;
 import pl.space_marine.game.Game;
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.bullets.Bullet;
+import pl.space_marine.game.rocket.stages.Avionic;
+import pl.space_marine.game.rocket.stages.Booster;
+import pl.space_marine.game.rocket.stages.Engine;
+import pl.space_marine.game.rocket.stages.Gun;
 import pl.space_marine.game.rocket.stages.Stage;
+import pl.space_marine.game.rocket.stages.Tank;
 
 public class Rocket {
     // instancja rakiety
@@ -34,6 +39,12 @@ public class Rocket {
         this.bullets = new ArrayList<>();
         this.stages = new ArrayList<>();
         this.image = Image.ROCKET;
+
+        stages.add(new Engine());
+        stages.add(new Avionic());
+        stages.add(new Booster());
+        stages.add(new Tank());
+        stages.add(new Gun());
     }
 
     public static Rocket getInstance(){

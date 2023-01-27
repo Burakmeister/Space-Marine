@@ -15,15 +15,9 @@ import com.badlogic.gdx.utils.Scaling;
 import pl.space_marine.game.Renderer;
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.rocket.Rocket;
-import pl.space_marine.game.rocket.stages.Avionic;
-import pl.space_marine.game.rocket.stages.Booster;
-import pl.space_marine.game.rocket.stages.Engine;
-import pl.space_marine.game.rocket.stages.Gun;
-import pl.space_marine.game.rocket.stages.Tank;
 
 public class UpgradesState extends State {
     private Table table;
-//    private Table table;
 
     private TextButton returnButton;
     private TextButton nextButton;
@@ -34,43 +28,17 @@ public class UpgradesState extends State {
     private TextButton upAvionicsBtn;
     private TextButton upBoosterBtn;
 
-    // tekstury ulepszeń
-    private Texture tankTex;
-    private Texture engineTex;
-    private Texture boosterTex;
-    private Texture avionicsTex;
-    private Texture gunTex;
-    // etykiety
-    private Label money;
-    private Label viewlable;
-    // etykiety ulepszeń
-    private Label engineLvlable;
-    private Label engineText = new Label("Engine",this.setLabel());
-    private Label tankLvlable;
-    private Label tankText = new Label("Tank",this.setLabel());
-    private Label boosterLvlable;
-    private Label boosterText = new Label("Booster",this.setLabel());
-    private Label avionicsLvlable;
-    private Label avionicsText = new Label("Avionics",this.setLabel());
-    private Label gunLvlable;
-    private Label gunText = new Label("Gun",this.setLabel());
+    private final Label engineText = new Label("Engine",this.setLabel());
+    private final Label tankText = new Label("Tank",this.setLabel());
+    private final Label boosterText = new Label("Booster",this.setLabel());
+    private final Label avionicsText = new Label("Avionics",this.setLabel());
+    private final Label gunText = new Label("Gun",this.setLabel());
 
-
-    // zmienne poziomy
-    private int tankLv;
-    private int engineLv;
-    private int avionicsLv;
-    private int gunLv;
-    private int boosterLv;
-
-    private Rocket rocket;
+    private final Rocket rocket;
     public UpgradesState(GameStateManager gsm, Stage stage, Rocket rocket) {
         super(gsm, stage);
         this.rocket = rocket;
         makeUpgradesComponents();
-
-
-
     }
 
     public void makeUpgradesComponents() {
@@ -79,191 +47,74 @@ public class UpgradesState extends State {
         table.setFillParent(true);
         Gdx.input.setInputProcessor(stage);
 
-//        upgradesTable.setPosition(0,0);
         table.setPosition(0,0);
         table.setDebug(true);
-//        upgradesTable.setDebug(true);
-//        table.defaults().width((float) (Gdx.graphics.getWidth()/3.5));  //  viewport.getWorldWidth()/3.5
-//        upgradesTable.align(Align.center);
-//        viewTable.align(Align.center);
 
-
-
-        populateTable(1,1,1,1,1,rocket.getAccountBalance());
-//        upgradesTable.pack();
-//        viewTable.add(upgradesTable);
+        populateTable(rocket.getAccountBalance());
+        addButtonsListeners();
         table.pack();
         stage.addActor(table);
     }
 
-    public void populateTable(int tankLevel, int engineLevel, int avionicsLevel, int boosterLevel, int gunLevel, int playerMoney) {
-        this.boosterLv = boosterLevel;
-        this.engineLv = engineLevel;
-        this.gunLv = gunLevel;
-        this.avionicsLv = avionicsLevel;
-        this.tankLv = tankLevel;
-//        this.playerMoney = playerMoney;
-        viewlable = new Label("Upgrades",this.setLabel());
+    public void populateTable( int playerMoney) {
+        Label viewlable = new Label("Upgrades", this.setLabel());
         viewlable.setAlignment(Align.center);
 //        engine row
-        engineTex = Image.ENGINE.getTexture();
+        Texture engineTex = Image.ENGINE.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image engineImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(engineTex);
         engineImage.setScaling(Scaling.fit);
-        engineLvlable = new Label("Level "+ engineLv +".",this.setLabel());
+        // etykiety ulepszeń
+        Label engineLvlable = new Label("Level " + rocket.getStages().get(0).getLevel() + ".", this.setLabel());
         engineLvlable.setAlignment(Align.center);
         engineText.setAlignment(Align.center);
         upEngineBtn = new TextButton("Upgrade", this.setButton());
-        upEngineBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                boolean isStageAdded = false;
-                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
-                    if (stage instanceof Engine) {
-                        stage.incrementLevel();
-                        engineLv++;
-                        isStageAdded = true;
-                        System.out.println("ulepszono");
-                    }
-                }
-                if (!isStageAdded) {
-                    rocket.getStages().add(new Engine());
-                    System.out.println("dodano silnik");
-                }
-            }
-        });
+
 //        tank row
-        tankTex = Image.FUEL_TANK.getTexture();
+        // tekstury ulepszeń
+        Texture tankTex = Image.FUEL_TANK.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image tankImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(tankTex);
         tankImage.setScaling(Scaling.fit);
-        tankLvlable = new Label("Level "+ tankLv +".",this.setLabel());
+        Label tankLvlable = new Label("Level " + rocket.getStages().get(3).getLevel() + ".", this.setLabel());
         tankLvlable.setAlignment(Align.center);
         tankText.setAlignment(Align.center);
         upTankBtn = new TextButton("Upgrade", this.setButton());
-        upTankBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                boolean isStageAdded = false;
-                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
-                    if (stage instanceof Tank) {
-                        stage.incrementLevel();
-                        tankLv++;
-                        isStageAdded = true;
-                        System.out.println("ulepszono");
-                    }
-                }
-                if (!isStageAdded) {
-                    rocket.getStages().add(new Tank());
-                    System.out.println("dodano zbiornik");
-                }
 
-            }
-        });
 //        avionics row
-        avionicsTex = Image.AVIONICS.getTexture();
+        Texture avionicsTex = Image.AVIONICS.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image avionicsImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(avionicsTex);
         avionicsImage.setScaling(Scaling.fit);
-        avionicsLvlable = new Label("Level "+ avionicsLv +".",this.setLabel());
+        Label avionicsLvlable = new Label("Level " + rocket.getStages().get(1).getLevel() + ".", this.setLabel());
         avionicsLvlable.setAlignment(Align.center);
         avionicsText.setAlignment(Align.center);
         upAvionicsBtn = new TextButton("Upgrade", this.setButton());
-        upAvionicsBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                boolean isStageAdded = false;
-                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
-                    if (stage instanceof Avionic) {
-                        stage.incrementLevel();
-                        avionicsLv++;
-                        isStageAdded = true;
-                        System.out.println("ulepszono");
-                    }
-                }
-                if (!isStageAdded) {
-                    rocket.getStages().add(new Avionic());
-                    System.out.println("dodano avionic");
-                }
-            }
-        });
+
 //        gun row
-        gunTex = Image.GUN.getTexture();
+        Texture gunTex = Image.GUN.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image gunImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(gunTex);
         gunImage.setScaling(Scaling.fit);
-        gunLvlable = new Label("Level "+ gunLv +".",this.setLabel());
+        Label gunLvlable = new Label("Level " + rocket.getStages().get(4).getLevel() + ".", this.setLabel());
         gunLvlable.setAlignment(Align.center);
         gunText.setAlignment(Align.center);
         upGunBtn = new TextButton("Upgrade", this.setButton());
-        upGunBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                boolean isStageAdded = false;
-                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
-                    if (stage instanceof Gun) {
-                        stage.incrementLevel();
-                        gunLv++;
-                        isStageAdded = true;
-                        System.out.println("ulepszono");
-                    }
-                }
-                if (!isStageAdded) {
-                    rocket.getStages().add(new Gun());
-                    System.out.println("dodano gun");
-                }
-                System.out.println("not coded yet -- upGunBtn");
-            }
-        });
+
 //        booster row
-        boosterTex = Image.BOOSTER.getTexture();
+        Texture boosterTex = Image.BOOSTER.getTexture();
         com.badlogic.gdx.scenes.scene2d.ui.Image boosterImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(boosterTex);
         boosterImage.setScaling(Scaling.fit);
-        boosterLvlable = new Label("Level "+ boosterLv +".",this.setLabel());
+        Label boosterLvlable = new Label("Level " + rocket.getStages().get(2).getLevel() + ".", this.setLabel());
         boosterLvlable.setAlignment(Align.center);
         boosterText.setAlignment(Align.center);
         upBoosterBtn = new TextButton("Upgrade", this.setButton());
-        upBoosterBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                boolean isStageAdded = false;
-                for (pl.space_marine.game.rocket.stages.Stage stage : rocket.getStages()) {
-                    if (stage instanceof Booster) {
-                        stage.incrementLevel();
-                        boosterLv++;
-                        isStageAdded = true;
-                        System.out.println("ulepszono");
-                    }
-                }
-                if (!isStageAdded) {
-                    rocket.getStages().add(new Booster());
-                    System.out.println("dodano booster");
-                }
-            }
-        });
-        returnButton = new TextButton("Return", this.setButton());
-        returnButton.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed");
-                stage.clear();
-                gsm.set(new MenuState(gsm, stage));
-            }
-        });
-        nextButton = new TextButton("Next Flight", this.setButton());
-        nextButton.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed1");
-                stage.clear();
-                gsm.set(new Renderer(gsm, stage));
-            }
-        });
 
-        money = new Label("Money: " + playerMoney,this.setLabel());
+        returnButton = new TextButton("Return", this.setButton());
+
+        nextButton = new TextButton("Next Flight", this.setButton());
+
+
+        // etykiety
+        Label money = new Label("Money: " + playerMoney, this.setLabel());
         money.setAlignment(Align.center);
 
-//        upgradesTable.setTransform(true);
-////        upgradesTable.setOrigin(upgradesTable.getWidth()/3,upgradesTable.getHeight()/3);
-//        upgradesTable.moveBy(-upgradesTable.getWidth()/2,-upgradesTable.getHeight()/2);
-////        upgradesTable.setPosition(0, 0);
-//        upgradesTable.setScale(3);
         table.add(viewlable).colspan(3).center().row();
         table.row();
         table.add(engineText).colspan(3).row();
@@ -291,14 +142,86 @@ public class UpgradesState extends State {
         table.add(money);
     }
 
+    public void revalidateTable() {
+        table.clear();
+        populateTable(rocket.getAccountBalance());
+        addButtonsListeners();
+        table.invalidate();
+    }
+
+    public void addButtonsListeners() {
+        upEngineBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                rocket.getStages().get(0).incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages().get(0).toString());
+                revalidateTable();
+            }
+        });
+
+        upTankBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                rocket.getStages().get(3).incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages().get(3).toString());
+                revalidateTable();
+            }
+        });
+
+        upAvionicsBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                rocket.getStages().get(1).incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages().get(1).toString());
+                revalidateTable();
+            }
+        });
+
+        upGunBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                rocket.getStages().get(4).incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages().get(4).toString());
+                revalidateTable();
+            }
+        });
+
+        upBoosterBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                rocket.getStages().get(2).incrementLevel();
+                System.out.println("ulepszono" + rocket.getStages().get(2).toString());
+                revalidateTable();
+            }
+        });
+
+        returnButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("Button Pressed");
+                stage.clear();
+                gsm.set(new MenuState(gsm, stage));
+            }
+        });
+
+        nextButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("Button Pressed1");
+                stage.clear();
+                gsm.set(new Renderer(gsm, stage));
+            }
+        });
+    }
+
     @Override
     public void handleInput() {
-
+//      bo tak
     }
 
     @Override
     public void update(float dt) {
-
+//      bo tak
     }
 
     @Override
@@ -309,6 +232,6 @@ public class UpgradesState extends State {
 
     @Override
     public void dispose() {
-
+//      bo tak
     }
 }

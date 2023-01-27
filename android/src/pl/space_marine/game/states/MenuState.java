@@ -50,8 +50,8 @@ public class MenuState extends State {
         table.align(Align.center);
 
         table.defaults().width(100);
-        table.add(playButton).pad(10);
-        table.row();
+        table.add(playButton).pad(10).row();
+//        table.row();
         table.add(highScoreButton);
         table.pack();
         backgroundImage.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());

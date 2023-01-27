@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum Image {
     // elementy konstrukcyjne rakiety
-//    AVIONIC("avionic.png"),
-//    BOOSTER("booster.png"),
-//    ENGINE("engine.png"),
-//    GUN("gun.png"),
-//    TANK("tank.png"),
-    ROCKET("rocket_scale.png", Direction.NONE),
+//    AVIONIC_STAGE("avionic.png"),
+//    BOOSTER_STAGE("booster.png"),
+//    ENGINE_STAGE("engine.png"),
+//    GUN_STAGE("gun.png"),
+//    TANK_STAGE("tank.png", Direction.NONE),
+    ROCKET("rocket_no_boosters.png", Direction.NONE),
     ENGINE_FIRE("engine_fire.png", Direction.LEFT, 2, 2),
 
     // pociski
