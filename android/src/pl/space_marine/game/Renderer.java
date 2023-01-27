@@ -128,7 +128,7 @@ public class Renderer extends State {
     public void render(SpriteBatch sb) {
         camera.update();
         sb.setProjectionMatrix(camera.combined);
-        camera.position.set(rocket.getX(), rocket.getY() + (Gdx.graphics.getHeight() / 2) , 0); //Ezunia its me bartolomeo
+        camera.position.set(rocket.getX(), rocket.getY() + (Gdx.graphics.getHeight() - rocket.getImage().getTexture().getHeight()) , 0); //Ezunia its me bartolomeo
         sb.begin();
         next();
         int i=0;
