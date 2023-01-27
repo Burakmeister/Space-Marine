@@ -120,6 +120,10 @@ public class DefaultBuilder implements Builder{
     public ImpedimentsIterator<Impediment> getResult() {
         return this.list;
     }
+    @Override
+    public void clear(){
+        this.list.clear();
+    }
 
     @Override
     public int getHeight() {

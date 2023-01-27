@@ -70,12 +70,12 @@ public class UpgradesState extends State {
     public void makeUpgradesComponents() {
         table = new Table();
         table.setFillParent(true);
-        stage = new Stage(viewport);
+//        stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
 
         table.setPosition(0,0);
 //        table.setDebug(true);
-        table.defaults().width((float) (viewport.getWorldWidth()/3.5));
+//        table.defaults().width((float) (viewport.getWorldWidth()/3.5));
         table.align(Align.center);
 
         populateTable(1,1,1,1,1,1000);

@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public abstract class State {
     protected GameStateManager gsm;
     protected Stage stage;
-    protected Viewport viewport;
     protected TextButton.TextButtonStyle textButtonStyle;
     protected BitmapFont font;
     protected Skin skin;
@@ -32,7 +31,6 @@ public abstract class State {
     protected State(GameStateManager gsm, Stage stage){
         this.gsm = gsm;
         this.stage = stage;
-        this.viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
         font = new BitmapFont();
         skin = new Skin();
         buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons.pack"));
