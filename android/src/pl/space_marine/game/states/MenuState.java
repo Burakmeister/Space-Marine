@@ -18,8 +18,6 @@ import pl.space_marine.game.assets.Image;
 
 public class MenuState extends State {
     private Texture background;
-//    private TextureRegion mainBackground;
-//    private Stage stage;
     private Table table;
     private TextButton playButton;
     private TextButton highScoreButton;
@@ -31,31 +29,23 @@ public class MenuState extends State {
         table = new Table();
         table.setFillParent(true);
         Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
-        this.stage = new Stage(viewport);
-//        this.stage = new Stage();
-//        this.stage.setViewport(viewport);
+        this.stage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4));
+//        this.stage.setViewport();
         Gdx.input.setInputProcessor(this.stage);
 
         playButton = new TextButton("Play", this.setButton());
-//        playButton.setTransform(true);
-//        playButton.setOrigin(playButton.getWidth(),playButton.getHeight());
-//        playButton.moveBy(playButton.getWidth(),playButton.getHeight());
-//        playButton.setScale(2);
-
-//        table.setScale(2);
         highScoreButton = new TextButton("High Score", this.setButton());
 
         table.setDebug(true);
-//        table.setPosition(0,0);
+        table.setPosition(0,0);
         table.align(Align.center);
 
         table.defaults().width(100);
-        table.add(playButton).pad(10).row();
-//        table.row();
+        table.add(playButton).pad(10);
+        table.row();
         table.add(highScoreButton);
         table.pack();
         backgroundImage.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
-//        backgroundImage.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());    //   viewport.getWorldWidth(), viewport.getWorldHeight()
         this.stage.addActor(backgroundImage);
         this.stage.addActor(table);
 

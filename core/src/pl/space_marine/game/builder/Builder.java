@@ -20,5 +20,6 @@ public interface Builder {
     public void setSpeed(int speed);
     public void setCollisionDamage(float collisionDamage);
     public ImpedimentsIterator<Impediment> getResult();
+    public void clear();
     public int getHeight();
 }
