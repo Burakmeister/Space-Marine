@@ -19,7 +19,6 @@ import pl.space_marine.game.states.MenuState;
 
 public class App extends ApplicationAdapter {
     private GameStateManager gsm;
-
     private Stage stage;
 
     @Override
