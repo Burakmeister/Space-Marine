@@ -10,6 +10,7 @@ import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.bullets.Bullet;
 import pl.space_marine.game.rocket.stages.Avionic;
 import pl.space_marine.game.rocket.stages.Booster;
+import pl.space_marine.game.rocket.stages.CoreRocket;
 import pl.space_marine.game.rocket.stages.Engine;
 import pl.space_marine.game.rocket.stages.Gun;
 import pl.space_marine.game.rocket.stages.Stage;
@@ -42,7 +43,8 @@ public class Rocket {
                 new Avionic(),
                 new Booster(),
                 new Tank(),
-                new Gun()
+                new Gun(),
+                new CoreRocket()
         };
         this.image = Image.ROCKET;
     }

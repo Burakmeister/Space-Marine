@@ -16,11 +16,14 @@ public class RocketBuilder {
 
     public RocketBuilder(Rocket rocket) {
         this.rocket = rocket;
+        System.out.println(rocket);
         this.sprites = new HashMap<>();
         Sprite rocketSprite = new Sprite(Image.ROCKET.getTexture());
         rocketSprite.setOrigin(rocket.getImage().getTexture().getWidth()/2,rocket.getImage().getTexture().getHeight()/2);
         rocketSprite.setX(rocket.getX());
         rocketSprite.setY(rocket.getY());
+        sprites.put(rocket.getStages()[5],new ArrayList<Sprite>());
+
         sprites.put(rocket.getStages()[2], new ArrayList<Sprite>());
     }
 
@@ -29,19 +32,19 @@ public class RocketBuilder {
     }
 
     public void addBooster(Stage stage) {
-        if (stage.getLevel() == 1) {
+        if (stage.getLevel() == 1 &&  sprites.get(rocket.getStages()[2]).size() == 0) {
             Sprite booster = new Sprite(Image.BOOSTER_STAGE.getTexture());
             booster.setOrigin(rocket.getImage().getTexture().getWidth()/2,rocket.getImage().getTexture().getHeight()/2);
-            booster.setX(rocket.getX()+rocket.getImage().getTexture().getWidth()/2);
+            booster.setX(rocket.getX());
             booster.setY(rocket.getY());
             sprites.get(rocket.getStages()[2]).add(booster);
-        } else if (stage.getLevel() == 2) {
+        } else if (stage.getLevel() == 2 && sprites.get(rocket.getStages()[2]).size() == 1) {
             Sprite booster = new Sprite(Image.BOOSTER_STAGE.getTexture());
             booster.setOrigin(rocket.getImage().getTexture().getWidth()/2,rocket.getImage().getTexture().getHeight()/2);
             booster.setX(rocket.getX()-rocket.getImage().getTexture().getWidth()/2);
             booster.setY(rocket.getY());
             sprites.get(rocket.getStages()[2]).add(booster);
-        }  else if (stage.getLevel() == 3) {
+        }  else if (stage.getLevel() == 3 && sprites.get(rocket.getStages()[2]).size() == 2) {
             Sprite booster = new Sprite(Image.BOOSTER_STAGE.getTexture());
             booster.setOrigin(rocket.getImage().getTexture().getWidth()/2,rocket.getImage().getTexture().getHeight()/2);
             booster.setX(rocket.getX());
@@ -94,12 +97,12 @@ public class RocketBuilder {
             sprites.get(1).setX(rocket.getX()-rocket.getImage().getTexture().getWidth()/2);
             sprites.get(1).setY(rocket.getY());
         } else if (sprites.size() == 3) {
-            sprites.get(0).setX(rocket.getX()+rocket.getImage().getTexture().getWidth()/2);
-            sprites.get(0).setY(rocket.getY());
-            sprites.get(1).setX(rocket.getX()-rocket.getImage().getTexture().getWidth()/2);
-            sprites.get(1).setY(rocket.getY());
-            sprites.get(2).setX(rocket.getX());
-            sprites.get(2).setY(rocket.getY());
+            sprites.get(sprites.size()-2).setX(rocket.getX()+rocket.getImage().getTexture().getWidth()/2);
+            sprites.get(sprites.size()-2).setY(rocket.getY());
+            sprites.get(sprites.size()-3).setX(rocket.getX()-rocket.getImage().getTexture().getWidth()/2);
+            sprites.get(sprites.size()-3).setY(rocket.getY());
+            sprites.get(sprites.size()-1).setX(rocket.getX());
+            sprites.get(sprites.size()-1).setY(rocket.getY());
         }
     }
 

@@ -182,7 +182,7 @@ public class Renderer extends State {
 //                false, false
 //        );
         sb.end();
-        debugRenderer.render(world, camera.combined);
+//        debugRenderer.render(world, camera.combined);
         stage.draw();
     }
 

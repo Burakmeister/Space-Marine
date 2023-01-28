@@ -39,6 +39,7 @@ public class Animator{
     }
 
     public void render() {
+        batch.begin();
         stateTime+=Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
         int width, height;
@@ -48,6 +49,7 @@ public class Animator{
                 (flip ? -1 : 1)*width*scale, height*scale,
                 width, height,
                 1f, 1f, rotation);
+        batch.end();
     }
 
     public void dispose() {
