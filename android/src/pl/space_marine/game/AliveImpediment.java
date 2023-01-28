@@ -2,6 +2,7 @@ package pl.space_marine.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
@@ -21,13 +22,13 @@ public class AliveImpediment {
         this.impediment = impediment;
         boolean flip = false;
         if(impediment.getImage().getDirection() == Direction.LEFT){
-            impediment.setDirection(impediment.getDirection() + 90);
-            if(impediment.getDirection()>0){
+            impediment.setDirection(impediment.getDirection());
+            if(impediment.getDirection()>180){
                 flip=true;
             }
         } else if (impediment.getImage().getDirection() == Direction.RIGHT) {
-            impediment.setDirection(impediment.getDirection() - 90);
-            if(impediment.getDirection()<0){
+            impediment.setDirection(impediment.getDirection());
+            if(impediment.getDirection()<-180){
                 flip=true;
             }
         }
@@ -55,6 +56,13 @@ public class AliveImpediment {
         impediment.setDirection((int) (Math.toDegrees(transform.getRotation())));
         impediment.setX((int) transform.getPosition().x);
         impediment.setY((int) transform.getPosition().y);
+        if(impediment.getSpeed()!=0){
+            float x = (float) Math.sin(body.getAngle()); // minus PI as objects start off facing right
+            float y = (float) Math.cos(body.getAngle());
+            int g=10;
+            body.applyForceToCenter(new Vector2(body.getMass() * (x * (g + impediment.getSpeed())), body.getMass() * (y * (g + impediment.getSpeed()))), true);
+//            body.setGravityScale(0);
+        }
 
         if(isAnimation){
             Animator anime = (Animator) this.drawer;

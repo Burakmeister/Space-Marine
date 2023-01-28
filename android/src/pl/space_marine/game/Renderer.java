@@ -97,7 +97,13 @@ public class Renderer extends State {
         rocketSprite.setOrigin(0, 0);
         createGround();
 
-//        rocketBody.appl(50000, true);
+//        Vector2 vec = rocketBody.getPosition();
+//        rocket.setX((int) vec.x);
+//        rocket.setY((int) vec.y);
+//        rocketBody.setTransform(vec, (float) (Math.toRadians(rocket.getOrientation())));
+//        rocketBody.applyForce(new Vector2(
+//                rocketBody.getMass() * (300),//x force to apply
+//                rocketBody.getMass() * (300)), new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y+rocket.getImage().getTexture().getHeight()/2), true);
     }
 
 
@@ -112,10 +118,10 @@ public class Renderer extends State {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if ((int) x > 0 && rotation < 45) {
+            if ((int) x > 0) {
                 rotation += 5;
                 rocket.setOrientation(rotation);
-            } else if ((int) x < 0 && rotation > -45) {
+            } else if ((int) x < 0) {
                 rotation -= 5;
                 rocket.setOrientation(rotation);
             }
@@ -146,10 +152,17 @@ public class Renderer extends State {
         rocket.setX((int) vec.x);
         rocket.setY((int) vec.y);
         rocketBody.setTransform(vec, (float) (Math.toRadians(rocket.getOrientation())));
-        float x = (float) Math.sin(rocketBody.getAngle()); // minus PI as objects start off facing right
+        float x = (float) Math.sin(rocketBody.getAngle());
         float y = (float) Math.cos(rocketBody.getAngle());
+        rocketBody.applyForce(new Vector2(
+                        rocketBody.getMass() * (x * 300),//x force to apply
+                        rocketBody.getMass() * (y * 300)), new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y), true);
 
-        rocketBody.applyForceToCenter(new Vector2(rocketBody.getMass() * (x * (g + 20)), rocketBody.getMass() * (y * (g + 20))), true);
+        //if paliwo jest
+//        rocketBody.applyForceToCenter(new Vector2(rocketBody.getMass() * x * (g + 20), rocketBody.getMass() * y * (g + 20)), true);
+
+        //if booster to kolejny force
+        //trzeba ogarnac jak dziala masa etc.
 
         rocketSprite.setRotation(rocket.getOrientation());
         rocketSprite.setPosition(rocket.getX(), rocket.getY());

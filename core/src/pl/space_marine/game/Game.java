@@ -41,10 +41,10 @@ public class Game {
             case 1:
                 switch (rand.nextInt(2)) {
                     case 0:
-                        builder.setDirection(90);
+                        builder.setDirection(0);
                         break;
                     case 1:
-                        builder.setDirection(-90);
+                        builder.setDirection(180);
                         break;
                 }
                 builder.setSpeed(rand.nextInt(5));
@@ -52,27 +52,27 @@ public class Game {
                 break;
             case 3:
                 builder.setDirection(rand.nextInt(360)-180);
-                builder.setSpeed(rand.nextInt(5));
+                builder.setSpeed(0);
                 builder.addDragon();
                 break;
             case 4:
-                builder.setDirection(rand.nextInt(360)-180);
+                builder.setDirection(rand.nextInt(160)+100);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addSatelite();
                 break;
             case 5:
-                builder.setDirection(rand.nextInt(360)-180);
+                builder.setDirection(rand.nextInt(160)+100);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addMeteor();
                 break;
             case 6:
                 builder.setDirection(rand.nextInt(360)-180);
-                builder.setSpeed(rand.nextInt(5));
+                builder.setSpeed(0);
                 builder.addUfo();
                 break;
             case 7:
                 builder.setDirection(rand.nextInt(360)-180);
-                builder.setSpeed(rand.nextInt(5));
+                builder.setSpeed(0);
                 builder.addDrone();
                 break;
             case 8:
@@ -82,17 +82,17 @@ public class Game {
             case 9:
                 switch (rand.nextInt(2)) {
                     case 0:
-                        builder.setDirection(90);
+                        builder.setDirection(0);
                         break;
                     case 1:
-                        builder.setDirection(-90);
+                        builder.setDirection(180);
                         break;
                 }
                 builder.setSpeed(rand.nextInt(5));
                 builder.addPlane();
                 break;
             default: {
-                builder.setSpeed(0);
+                builder.setSpeed(rand.nextInt(2));
                 builder.setDirection(0);
                 builder.addCloud();
                 break;
