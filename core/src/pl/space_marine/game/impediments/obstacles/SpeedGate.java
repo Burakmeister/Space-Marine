@@ -7,7 +7,7 @@ import pl.space_marine.game.rocket.Rocket;
 public class SpeedGate extends Obstacle {
     private float acceleration;
 
-    public SpeedGate(Image image, float collisionDamage, float direction, int speed, int x, int y) {
+    public SpeedGate(Image image, float collisionDamage, int direction, int speed, int x, int y) {
         super(image, null, collisionDamage, direction, speed, x, y);
     }
 

@@ -1,7 +1,4 @@
 package pl.space_marine.game.builder;
-
-import static pl.space_marine.game.Game.SCREEN_HEIGHT;
-
 import java.util.Random;
 
 import pl.space_marine.game.assets.Image;
@@ -21,9 +18,9 @@ import pl.space_marine.game.iterator.ImpedimentsIterator;
 public class DefaultBuilder implements Builder{
     private int y;
     private int x;
-    float collisionDamage;
-    float direction;
-    int speed;
+    private float collisionDamage;
+    private int direction;
+    private int speed;
     private ImpedimentsIterator list;
 
     public DefaultBuilder(){
@@ -102,7 +99,7 @@ public class DefaultBuilder implements Builder{
     }
 
     @Override
-    public void setDirection(float direction) {
+    public void setDirection(int direction) {
         this.direction = direction;
     }
 
@@ -122,7 +119,6 @@ public class DefaultBuilder implements Builder{
     }
     @Override
     public void clear(){
-        this.list.clear();
     }
 
     @Override

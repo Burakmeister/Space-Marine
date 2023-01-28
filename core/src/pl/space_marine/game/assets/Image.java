@@ -72,6 +72,10 @@ public enum Image {
         return direction;
     }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
     public String getName() {
         System.out.println(name);
         return name;
