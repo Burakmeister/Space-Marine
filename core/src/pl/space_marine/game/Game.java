@@ -12,9 +12,7 @@ import pl.space_marine.game.iterator.ImpedimentsIterator;
 import pl.space_marine.game.rocket.Rocket;
 
 public class Game {
-    public static final int SCREEN_WIDTH = Gdx.graphics.getWidth();
-    public static final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
-    public static final int HEIGHT_BETWEEN_IMPEDIMENTS = 100;
+    public static final int HEIGHT_BETWEEN_IMPEDIMENTS = 10;
 
     private Builder builder;
     private ImpedimentsIterator iterator;
@@ -25,78 +23,69 @@ public class Game {
 
     public Game() {
         this.builder = new DefaultBuilder();
-        ImpedimentsIterator it = new ImpedimentsIterator();
-        for (int y = 0; y < SCREEN_HEIGHT; y += HEIGHT_BETWEEN_IMPEDIMENTS) {
-            it.join(drawImpediments(it));
-        }
-        this.rocket.setY(0);
     }
 
-    public void maneuver(boolean isRight) {
-        //not implemented yet
-    }
-
-    public ImpedimentsIterator<Impediment> drawImpediments(ImpedimentsIterator it) {
+    public ImpedimentsIterator<Impediment> drawImpediments() {
         builder.clear();
         Random rand = new Random();
-        int x = rand.nextInt(Gdx.graphics.getWidth()) + rocket.getX();
+        int x = rand.nextInt(5000)-2500;
         builder.setX(x);
         builder.moveHigher(HEIGHT_BETWEEN_IMPEDIMENTS);
         int randInt = rand.nextInt(15);
         switch (randInt) {
             case 0:
-                builder.setDirection(rand.nextFloat() + 0.5f);
+                builder.setDirection(rand.nextInt(360)-180);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addBalloon();
                 break;
             case 1:
                 switch (rand.nextInt(2)) {
                     case 0:
-                        builder.setDirection(0.5f);
+                        builder.setDirection(90);
                         break;
                     case 1:
-                        builder.setDirection(1.5f);
+                        builder.setDirection(-90);
                         break;
                 }
                 builder.setSpeed(rand.nextInt(5));
                 builder.addBird();
                 break;
             case 3:
-                builder.setDirection(rand.nextFloat() + 0.5f);
+                builder.setDirection(rand.nextInt(360)-180);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addDragon();
                 break;
             case 4:
-                builder.setDirection(rand.nextFloat() + 0.5f);
+                builder.setDirection(rand.nextInt(360)-180);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addSatelite();
                 break;
             case 5:
-                builder.setDirection(rand.nextFloat() + 0.5f);
+                builder.setDirection(rand.nextInt(360)-180);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addMeteor();
                 break;
             case 6:
-                builder.setDirection(rand.nextFloat() + 0.5f);
+                builder.setDirection(rand.nextInt(360)-180);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addUfo();
                 break;
             case 7:
-                builder.setDirection(rand.nextFloat() + 0.5f);
+                builder.setDirection(rand.nextInt(360)-180);
                 builder.setSpeed(rand.nextInt(5));
                 builder.addDrone();
                 break;
             case 8:
                 builder.setSpeed(0);
-                builder.addSpeedGate();
+//                builder.addSpeedGate();
                 break;
             case 9:
                 switch (rand.nextInt(2)) {
                     case 0:
-                        builder.setDirection(0.5f);
+                        builder.setDirection(90);
                         break;
                     case 1:
-                        builder.setDirection(1.5f);
+                        builder.setDirection(-90);
                         break;
                 }
                 builder.setSpeed(rand.nextInt(5));
@@ -109,10 +98,7 @@ public class Game {
                 break;
             }
         }
-        iterator = this.builder.getResult();
-        iterator.refreshCursor();
-        iterator.join(it);
-        return iterator;
+        return builder.getResult();
     }
 
 

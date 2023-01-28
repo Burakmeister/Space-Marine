@@ -6,7 +6,7 @@ import pl.space_marine.game.impediments.Obstacle;
 public class Cloud extends Obstacle {
     private boolean storm;
 
-    public Cloud(Image image, float collisionDamage, float direction, int speed, int x, int y) {
+    public Cloud(Image image, float collisionDamage, int direction, int speed, int x, int y) {
         super(image, null, collisionDamage, direction, speed, x, y);
     }
 

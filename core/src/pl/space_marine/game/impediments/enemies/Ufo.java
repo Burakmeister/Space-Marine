@@ -4,7 +4,7 @@ import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Enemy;
 
 public class Ufo extends Enemy {
-    public Ufo(Image image, float collisionDamage, float direction, int speed, int x, int y) {
+    public Ufo(Image image, float collisionDamage, int direction, int speed, int x, int y) {
         super(image, null, collisionDamage, direction, speed, x, y);
     }
 }

@@ -12,14 +12,14 @@ public abstract class Impediment {
 
     protected float collisionDamage;    // obrażenia zadane podczas zderzenia z graczem
     protected float HP = 1;             // zdrowie przeszkody
-    protected float direction;          // kierunek radiany bez pi 0 - w gore
+    protected int direction;          // stopnie -180 - 180
     protected int speed;
     protected int x;
     protected int y;
 
 
 
-    public Impediment(Image image, Listener listener, float collisionDamage, float direction, int speed, int x, int y){
+    public Impediment(Image image, Listener listener, float collisionDamage, int direction, int speed, int x, int y){
         this.collisionDamage = collisionDamage;
         this.texture = image;
         this.listener = listener;
@@ -35,7 +35,6 @@ public abstract class Impediment {
     }
     // efekt wywołany na rakiecie przy kolizji
     public void collisionEffect(CollisionType collisionType){
-
             switch(collisionType) {
                 case ROCKET:
                     listener.update(this, CollisionType.ROCKET);
@@ -44,8 +43,6 @@ public abstract class Impediment {
                     listener.update(this, CollisionType.IMPEDIMENT);
                     break;
             }
-
-
     }
 
 //    public void notifyListeners(){
@@ -67,7 +64,7 @@ public abstract class Impediment {
     public int getY() {
         return y;
     }
-    public float getDirection() {
+    public int getDirection() {
         return direction;
     }
 
@@ -77,5 +74,17 @@ public abstract class Impediment {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

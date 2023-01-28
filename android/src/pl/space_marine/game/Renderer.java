@@ -3,12 +3,16 @@ package pl.space_marine.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -27,25 +31,29 @@ import pl.space_marine.game.states.State;
 
 
 public class Renderer extends State {
+    public static final float SCALE = 0.2f;
     static final float STEP_TIME = 1f / 60f;
     static final int VELOCITY_ITERATIONS = 6;
     static final int POSITION_ITERATIONS = 2;
-    float accumulator = 0;
+    private float accumulator = 0;
     private Game game;
     private World world;
     private PhysicsShapeCache bodiesCache;
-    private Array<Body> bodies;
     private Body rocketBody;
+    private Sprite rocketSprite;
     private Box2DDebugRenderer debugRenderer;
     private Rocket rocket;
     //    private TextButton returnButton;
-    private Array<Object> sprites;
     private OrthographicCamera camera;
     private ExtendViewport viewport;
-
+    private Array<AliveImpediment> impediments;
     private ImpedimentsIterator iterator;
 
-    private boolean beforeStart = false;
+    private Body ground;
+
+    private int g = 10;
+
+    private BitmapFont height = new BitmapFont();
 
     public Renderer(GameStateManager gsm, Stage stage) {
         super(gsm, stage);
@@ -53,46 +61,43 @@ public class Renderer extends State {
 
         this.game = new Game();
         this.rocket = game.getRocket();
-        this.sprites = new Array<>();
-        this.bodies = new Array<>();
+        this.impediments = new Array<>();
         iterator = new ImpedimentsIterator();
 
         rocket.setX(Gdx.graphics.getWidth() / 2 - Image.ROCKET.getTexture().getWidth() / 2);
         rocket.setY(0);
-        camera = new OrthographicCamera(1600, 3200);
-        camera.position.set(this.rocket.getX(), this.rocket.getY(), 0);
-        camera.update();
 
-        viewport = new ExtendViewport(800, 600, camera);
+        camera = new OrthographicCamera(300, 600);
+        viewport = new ExtendViewport(5000, 5000, camera);
         stage.setViewport(viewport);
 
+        camera.position.set(rocket.getX(), rocket.getY()+rocket.getImage().getTexture().getHeight(), 0);
+        camera.update();
 
         Gdx.input.setInputProcessor(this.stage);
-//        returnButton = new TextButton("Return", this.setButton());
-//
-//        returnButton.addListener(new ChangeListener() {
-//            @Override
-//            public void changed (ChangeEvent event, Actor actor) {
-//                System.out.println("Button Pressed");
-//                gsm.set(new MenuState(gsm, stage));
-//            }
-//        });
         Box2D.init();
         debugRenderer = new Box2DDebugRenderer();
 
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -g), true);
         this.bodiesCache = new PhysicsShapeCache(Gdx.files.internal("physics.xml"));
 
-
-//        sprite = new Sprite(meteor.getImage().getTexture());
-//        sprite.setPosition(meteor.getX(), meteor.getY());
-//        stage.addActor(returnButton);
-        Body body = bodiesCache.createBody(rocket.getImage().getName(), world, 1, 1);
-        body.setGravityScale(-50);
+        Body body = bodiesCache.createBody(rocket.getImage().getName(), world, SCALE, SCALE);
         body.setTransform(rocket.getX(), rocket.getY(), 0);
+
         this.rocketBody = body;
-//        for(int i=0; i<20; i++)
-        draw((SpriteBatch) stage.getBatch());
+//        this.rocketBody.applyForce();
+        for (int i = 0; i < 200; i++) {
+            game.drawImpediments();
+        }
+        iterator = game.drawImpediments();
+        getImpediments((SpriteBatch) stage.getBatch());
+        rocketSprite = new Sprite(rocket.getImage().getTexture());
+        rocketSprite.setPosition(rocket.getX(), rocket.getY());
+        rocketSprite.setScale(SCALE);
+        rocketSprite.setOrigin(0, 0);
+        createGround();
+
+//        rocketBody.appl(50000, true);
     }
 
 
@@ -102,7 +107,6 @@ public class Renderer extends State {
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
             // Get the current accelerometer values
             float x = Gdx.input.getAccelerometerX();
-
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -126,144 +130,50 @@ public class Renderer extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-        camera.update();
         sb.setProjectionMatrix(camera.combined);
-        camera.position.set(rocket.getX(), rocket.getY() + (Gdx.graphics.getHeight() - rocket.getImage().getTexture().getHeight()) , 0); //Ezunia its me bartolomeo
+        camera.position.set(rocket.getX(), (float) (rocket.getY()+rocket.getImage().getTexture().getHeight()*0.6), 0); //Ezunia its me bartolomeo
         sb.begin();
+
+        height.draw(sb, "Height: " + rocket.getY(), rocket.getX(), (int)(rocket.getY()-rocket.getImage().getTexture().getHeight()*0.1));
         next();
-        int i=0;
-        for (Object sprite : sprites) {
-            iterator.refreshCursor();
-            Impediment temp = (Impediment) iterator.next();
-            if (sprite instanceof Sprite) {
-                Sprite tmp = (Sprite) sprite;
-//                tmp.setPosition(bodies.get(i).getPosition().x,(bodies.get(i).getPosition().y));
-                tmp.draw(sb);
-            } else if (sprite instanceof Animator) {
-                Animator anime = (Animator) sprite;
-                anime.setPosition((int) bodies.get(i).getPosition().x, (int) bodies.get(i).getPosition().y);
-                anime.render();
-            }
-            i++;
+
+        for (AliveImpediment alive : this.impediments) {
+            alive.update();
+            alive.draw(sb);
         }
+
         Vector2 vec = rocketBody.getPosition();
         rocket.setX((int) vec.x);
         rocket.setY((int) vec.y);
-        rocketBody.setTransform(vec, (float) (rocket.getOrientation()*Math.PI/180));
+        rocketBody.setTransform(vec, (float) (Math.toRadians(rocket.getOrientation())));
+        float x = (float) Math.sin(rocketBody.getAngle()); // minus PI as objects start off facing right
+        float y = (float) Math.cos(rocketBody.getAngle());
+
+        rocketBody.applyForceToCenter(new Vector2(rocketBody.getMass() * (x * (g + 20)), rocketBody.getMass() * (y * (g + 20))), true);
+
+        rocketSprite.setRotation(rocket.getOrientation());
+        rocketSprite.setPosition(rocket.getX(), rocket.getY());
+        rocketSprite.draw(sb);
         camera.update();// Ezunia its me bartolomeo
-        sb.draw(rocket.getImage().getTexture(),
-                rocket.getX(), rocket.getY(),
-                rocket.getImage().getTexture().getWidth() / 2,
-                rocket.getImage().getTexture().getHeight() / 2,
-                rocket.getImage().getTexture().getWidth(),
-                rocket.getImage().getTexture().getHeight(),
-                1, 1, rocket.getOrientation(),
-                0,
-                0,
-                rocket.getImage().getTexture().getWidth(),
-                rocket.getImage().getTexture().getHeight(),
-                false, false
-        );
         sb.end();
         debugRenderer.render(world, camera.combined);
-        stage.draw();
+//        stage.draw();
     }
 
     @Override
     public void dispose() {
-        for (Object a : sprites) {
-            if (a instanceof Animator) {
-                Animator spr = (Animator) a;
-                spr.dispose();
-            }
+        for (AliveImpediment imp : this.impediments) {
+            imp.dispose();
         }
         world.dispose();
         debugRenderer.dispose();
     }
 
-    public void draw(SpriteBatch batch) {
-        iterator.join(game.drawImpediments(iterator));  //pobieram iterator impedimentów z game i lacze z tym co mam
-
+    public void getImpediments(SpriteBatch sb) {
         iterator.refreshCursor();
         while (iterator.hasNext()) {
-            Impediment impediment = (Impediment) iterator.next();
-            boolean flip = false;
-            switch (impediment.getImage().getDirection()) {  // sprawdzam orientacje i czy trzeba odbic
-                case LEFT: {
-                    if (impediment.getDirection() > 0 && impediment.getDirection() < 1) {
-                        flip = true;
-                    }
-                }
-                case RIGHT: {
-                    if (impediment.getDirection() > 1 && impediment.getDirection() < 2) {
-                        flip = true;
-                    }
-                }
-            }
-            if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {
-                Sprite spr = new Sprite(impediment.getImage().getTexture(), impediment.getImage().getTexture().getWidth(), impediment.getImage().getTexture().getHeight());
-                spr.setFlip(flip, false);
-                sprites.add(spr);
-                bodies.add(bodiesCache.createBody(impediment.getImage().getName(), world, 1, 1));
-            } else {
-                Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip, impediment.getDirection() * 180, impediment);
-                sprites.add(tmp);
-                bodies.add(bodiesCache.createBody(impediment.getImage().getName(), world, 1, 1));
-            }
+            this.impediments.add(new AliveImpediment((Impediment) iterator.next(), sb, bodiesCache, world));
         }
-//        for (Iterator it = iterator; it.hasNext(); ) {          // pętla z iteratorem
-//            Impediment impediment = (Impediment) it.next();
-//            boolean flip = false;
-//            switch (impediment.getImage().getDirection()){  // sprawdzam orientacje i czy trzeba odbic
-//                case LEFT:{
-//                    if(impediment.getDirection()>0 && impediment.getDirection()<1){
-//                        flip = true;
-//                    }
-//                }
-//                case RIGHT:{
-//                    if(impediment.getDirection()>1 && impediment.getDirection()<2){
-//                        flip = true;
-//                    }
-//                }
-//            }
-//
-//            for (Object sprite : sprites) {
-//                if(sprite instanceof Animator){
-//
-//                }else if(sprite instanceof Sprite){
-//
-//                }
-//            }
-//
-//            if (impediment.getImage().getCols() == 1 && impediment.getImage().getRows() == 1) {         // jesli obrazek nie jest animowany to po prostu rysuje
-//                //	public void draw (Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX,
-//                //		float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY);
-//                    batch.draw(impediment.getImage().getTexture(),
-//                            impediment.getX(), impediment.getY(),
-//                            impediment.getImage().getTexture().getWidth()/2,
-//                            impediment.getImage().getTexture().getHeight()/2,
-//                            impediment.getImage().getTexture().getWidth(),
-//                            impediment.getImage().getTexture().getHeight(),
-//                            1,
-//                            1,
-//                            impediment.getDirection()*180,
-//                            0,
-//                            0,
-//                            impediment.getImage().getTexture().getWidth(),
-//                            impediment.getImage().getTexture().getHeight(),
-//                            flip, false
-//                            );
-////                Log.d("ganerator", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
-//            } else {                                                                                    // w innym wypadku tworze Animator albo uzywal istniejacego jesli jest utworzony
-//
-//                if (!drawed) {
-//                    Animator tmp = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip, impediment.getDirection()*180, impediment);
-//                    sprites.add(tmp);
-//                }
-////                Log.d("ganerator(anime)", impediment.getImage().name() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
-//            }
-//
-//        }
     }
 
     public void removeActor(Impediment obj) {
@@ -271,8 +181,6 @@ public class Renderer extends State {
         int i = 0;
         while (!iterator.isEmpty()) {
             if (iterator.next().equals(obj)) {
-                sprites.removeIndex(i);
-                bodies.removeIndex(i);
                 iterator.remove();
                 break;
             }
@@ -288,5 +196,20 @@ public class Renderer extends State {
             accumulator -= STEP_TIME;
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         }
+    }
+
+    private void createGround() {
+        if (ground != null)
+            world.destroyBody(ground);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        FixtureDef fixtureDef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(5000, 1);
+        fixtureDef.shape = shape;
+        ground = world.createBody(bodyDef);
+        ground.createFixture(fixtureDef);
+        ground.setTransform(0, 0, 0);
+        shape.dispose();
     }
 }
