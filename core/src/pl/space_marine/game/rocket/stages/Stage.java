@@ -8,4 +8,12 @@ public abstract class Stage {
 
     public Stage(){
     }
+
+    public short getLevel() {
+        return level;
+    }
+
+    public void incrementLevel() {
+        this.level += 1;
+    }
 }

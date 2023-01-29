@@ -29,6 +29,7 @@ import pl.space_marine.game.iterator.ImpedimentsIterator;
 import pl.space_marine.game.rocket.Rocket;
 import pl.space_marine.game.states.GameStateManager;
 import pl.space_marine.game.states.State;
+import pl.space_marine.game.states.UpgradesState;
 
 
 public class Renderer extends State {
@@ -41,7 +42,7 @@ public class Renderer extends State {
     private World world;
     private PhysicsShapeCache bodiesCache;
     private Body rocketBody;
-    private Sprite rocketSprite;
+    private Sprite rocketSprite[];
     private Box2DDebugRenderer debugRenderer;
     private Rocket rocket;
     private OrthographicCamera camera;
@@ -88,10 +89,21 @@ public class Renderer extends State {
 //        this.rocketBody.applyForce();
         iterator = (ImpedimentsIterator) game.drawImpediments();
         getImpediments((SpriteBatch) stage.getBatch());
-        rocketSprite = new Sprite(rocket.getImage().getTexture());
-        rocketSprite.setPosition(rocket.getX(), rocket.getY());
-        rocketSprite.setScale(SCALE);
-        rocketSprite.setOrigin(0, 0);
+
+        this.rocketSprite = new Sprite[4];
+        this.rocketSprite[0] = new Sprite(Image.ROCKET.getTexture());
+        this.rocketSprite[1] = new Sprite(Image.ROCKET1.getTexture());
+        this.rocketSprite[2] = new Sprite(Image.ROCKET2.getTexture());
+        this.rocketSprite[3] = new Sprite(Image.ROCKET3.getTexture());
+
+        Vector2 vec = rocketBody.getPosition();
+        for (Sprite sprite : rocketSprite) {
+            sprite.setOrigin(0, 0);
+            sprite.setX((int) vec.x);
+            sprite.setY((int) vec.y);
+            sprite.setScale(SCALE);
+        }
+
         createGround();
     }
 
@@ -111,6 +123,19 @@ public class Renderer extends State {
             if (x < 1 && x > -1) {
                 rocket.setOrientation(0);
             }
+        } if (Gdx.input.isTouched()) {
+//            gsm.push(new UpgradesState(gsm, stage, rocket));
+
+
+//            State tmp = gsm.getPausedStates().peek();
+//            gsm.popPaused();
+//            gsm.pushPaused(gsm.getStates().peek());
+//            gsm.pop();
+//            stage.clear();
+//            ((MenuState)tmp).remakeScene();
+//            gsm.push(tmp);
+//            gsm.pushPaused(gsm.getStates().peek());
+            gsm.push(new UpgradesState(gsm, stage, rocket));
         }
 
     }
@@ -157,9 +182,13 @@ public class Renderer extends State {
         //if booster to kolejny force
         //trzeba ogarnac jak dziala masa etc.
 
-        rocketSprite.setRotation((float) Math.toDegrees(rocketBody.getAngle()));
-        rocketSprite.setPosition(rocket.getX(), rocket.getY());
-        rocketSprite.draw(sb);
+        rocketSprite[rocket.getStages()[4].getLevel()].setRotation((float) Math.toDegrees(rocketBody.getAngle()));
+        rocketSprite[rocket.getStages()[4].getLevel()].setPosition(rocket.getX(), rocket.getY());
+        rocketSprite[rocket.getStages()[4].getLevel()].draw(sb);
+
+//        rocketSprite.setRotation((float) Math.toDegrees(rocketBody.getAngle()));
+//        rocketSprite.setPosition(rocket.getX(), rocket.getY());
+//        rocketSprite.draw(sb);
 
         if(rocket.getY()%10==0){
             iterator = game.drawImpediments();
