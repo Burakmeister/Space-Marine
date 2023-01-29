@@ -14,7 +14,7 @@ public enum Image {
     ENGINE_FIRE("engine_fire.png", Direction.LEFT, 2, 2),
 
     // pociski
-
+    SHOTBULLET("Shotbullet.png", Direction.NONE),
     // tło
 
     BACKGROUND("bg.jpg", Direction.NONE),
