@@ -104,4 +104,17 @@ public class Rocket {
     public int getArmor() {
         return armor;
     }
+
+    public void updateImage(int level) {
+        switch (level) {
+           case 1:
+               this.image = Image.ROCKET1;
+               break;
+            case 2:
+                this.image = Image.ROCKET2;
+                break;
+            case  3:
+                this.image = Image.ROCKET3;
+        }
+    }
 }

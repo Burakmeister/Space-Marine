@@ -231,6 +231,7 @@ public class UpgradesState extends State {
                 if (1000*(rocket.getStages()[4].getLevel()+1) <= rocket.getAccountBalance() && rocket.getStages()[4].getLevel() <3) {
                     rocket.getStages()[4].incrementLevel();
                     rocket.buyUpgrade(1000*(rocket.getStages()[4].getLevel()));
+                    rocket.updateImage(rocket.getStages()[4].getLevel());
                     System.out.println("ulepszono" + rocket.getStages()[4].toString());
                     revalidateTable();
                 }
@@ -262,11 +263,16 @@ public class UpgradesState extends State {
         nextButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed1");
+//                System.out.println("Button Pressed1");
+//                State upgrades = gsm.getStates().lastElement();
+//                gsm.pop();
+//                State render = gsm.getStates().lastElement();
+//                gsm.pop();
+//                gsm.getStates().set(1, upgrades);
+//                gsm.getStates().set(2, render);
                 stage.clear();
                 gsm.pop();
 
-//                        (new Renderer(gsm, stage));
             }
         });
     }
@@ -291,4 +297,5 @@ public class UpgradesState extends State {
     public void dispose() {
 //      bo tak
     }
+
 }
