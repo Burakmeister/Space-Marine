@@ -253,26 +253,32 @@ public class UpgradesState extends State {
         returnButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed");
+                System.out.println("Return Button Pressed");
                 stage.clear();
+                State upgrades = gsm.getStates().peek();
                 gsm.pop();
+                State render = gsm.getStates().lastElement();
                 gsm.pop();
+                State menu = gsm.getStates().lastElement();
+//                ((MenuState) menu).setListenerPlay();
+                gsm.pop();
+                gsm.getStates().push(upgrades);
+                gsm.getStates().push(render);
+                gsm.getStates().push(menu);
             }
         });
 
         nextButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-//                System.out.println("Button Pressed1");
-//                State upgrades = gsm.getStates().lastElement();
-//                gsm.pop();
-//                State render = gsm.getStates().lastElement();
-//                gsm.pop();
-//                gsm.getStates().set(1, upgrades);
-//                gsm.getStates().set(2, render);
+                System.out.println("Button Pressed1");
                 stage.clear();
+                State upgrades = gsm.getStates().peek();
                 gsm.pop();
-
+                State render = gsm.getStates().lastElement();
+                gsm.pop();
+                gsm.getStates().push(upgrades);
+                gsm.getStates().push(render);
             }
         });
     }

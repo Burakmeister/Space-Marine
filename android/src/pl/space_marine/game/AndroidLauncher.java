@@ -3,6 +3,7 @@ package pl.space_marine.game;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -26,6 +27,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useAccelerometer = true;
 		config.useCompass = false;
 		config.useGyroscope = false;
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		initialize(new App(), config);
 	}
 }

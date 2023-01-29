@@ -53,6 +53,7 @@ public class Renderer extends State {
     private Body ground;
 
     private int g = 10;
+    private boolean hasUpdates = false;
 
     private BitmapFont height = new BitmapFont();
 
@@ -123,19 +124,21 @@ public class Renderer extends State {
             if (x < 1 && x > -1) {
                 rocket.setOrientation(0);
             }
-        } if (Gdx.input.isTouched()) {
-//            gsm.push(new UpgradesState(gsm, stage, rocket));
-
-
-//            State tmp = gsm.getPausedStates().peek();
-//            gsm.popPaused();
-//            gsm.pushPaused(gsm.getStates().peek());
-//            gsm.pop();
-//            stage.clear();
-//            ((MenuState)tmp).remakeScene();
-//            gsm.push(tmp);
-//            gsm.pushPaused(gsm.getStates().peek());
-            gsm.push(new UpgradesState(gsm, stage, rocket));
+        } if (Gdx.input.isTouched() && Gdx.input.getY() < Gdx.graphics.getHeight()/2) {
+            if (!hasUpdates) {
+                gsm.push(new UpgradesState(gsm, stage, rocket));
+                hasUpdates = true;
+            } else {
+                State render = gsm.getStates().lastElement();
+                gsm.pop();
+                System.out.println(render);
+                State upgrades = gsm.getStates().peek();
+                ((UpgradesState) upgrades).makeUpgradesComponents();
+                System.out.println(upgrades);
+                gsm.pop();
+                gsm.getStates().push(render);
+                gsm.getStates().push(upgrades);
+            }
         }
 
     }
