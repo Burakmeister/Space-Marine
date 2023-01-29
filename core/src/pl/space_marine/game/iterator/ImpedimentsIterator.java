@@ -1,64 +1,87 @@
 package pl.space_marine.game.iterator;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-public class ImpedimentsIterator<Impediment> implements Iterator<Impediment> {
+import pl.space_marine.game.impediments.Impediment;
+import pl.space_marine.game.rocket.Rocket;
 
-    private List<Impediment> list;
+public class ImpedimentsIterator<E> implements Iterator<E> {
 
+    private Impediment[] tab;
+    private int trueLength=0;
     private int cursor;
-    public ImpedimentsIterator(){
+    private Rocket rocket;
+    private  int maxOnScreen;
+
+    public ImpedimentsIterator(int maxOnScreen, Rocket rocket, Impediment[] tab, int trueLength){
         this.cursor = -1;
-        this.list = new ArrayList<>();
+        this.trueLength = trueLength;
+        this.tab = tab;
+        this.rocket = rocket;
+        this.maxOnScreen = maxOnScreen;
     }
     @Override
     public boolean hasNext() {
-        if(this.list.size()>cursor+1){
+        if(trueLength>cursor+1){
             return true;
         }
         return false;
     }
 
     @Override
-    public Impediment next() {
-        return this.list.get(++cursor);
+    public E next() {
+        System.out.println("kolejny");
+        return (E) tab[++cursor];
     }
 
     @Override
-    public void remove() {
-        if(cursor>=0 && cursor<list.size())
-            this.list.remove(cursor);
+    public void remove(){
     }
 
-    public void remove(Object obj){
-        if(obj instanceof pl.space_marine.game.impediments.Impediment){
-            list.remove(obj);
+
+    public void add(Object obj) throws Exception {
+        System.out.println("add " + "lenght="+trueLength);
+        if(obj instanceof Impediment){
+            if(trueLength<maxOnScreen){
+                tab[trueLength] = (Impediment) obj;
+                trueLength++;
+                return;
+            }
+
+            int i;
+            boolean found=false;
+            Impediment temp = tab[0];
+            for(i=1; i<tab.length && tab[i]!=null; i++){
+                if(Math.sqrt(Math.pow(rocket.getX() - temp.getX(), 2)+Math.pow(rocket.getX() - temp.getX(), 2)) < Math.sqrt(Math.pow(rocket.getX() - tab[i].getX(), 2)+Math.pow(rocket.getX() - tab[i].getX(), 2))){
+                    temp = tab[i];
+                    found = true;
+                }
+            }if(found){
+                swap(temp, (Impediment) obj);
+            }
+        }else{
+            throw new Exception("List store only Impediment object!");
         }
-    }
-    public void add(Impediment impediment){
-        this.list.add(impediment);
     }
 
     public void refreshCursor(){
         this.cursor=-1;
     }
     public boolean isEmpty(){
-        return list.isEmpty();
+        return tab.length==0;
     }
-    public void join(ImpedimentsIterator it){
-        if(it!=null){
-            it.refreshCursor();
-            while(it.hasNext()){
-                this.add((Impediment) it.next());
+
+    public void swap(Impediment oldImp, Impediment newImp){
+        for(int i=0; i<tab.length; i++){
+            if(tab[i].equals(oldImp)){
+                tab[i] = newImp;
+                return;
             }
         }
     }
 
-    public void clear(){
-        cursor = -1;
-        this.list.clear();
+    public int size(){
+        return this.trueLength;
     }
 
 }
