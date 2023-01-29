@@ -8,9 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animator{
-    private Object object;
     private int x, y;
-    private float rotation = 0;
+    private int rotation = 0;
     private float scale = 1f;
     private boolean flip = false;
     private Animation<TextureRegion> animation;
@@ -27,14 +26,14 @@ public class Animator{
         this.create();
     }
 
-    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y, boolean flip, float rotation, Object obj){
+    public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y, boolean flip, int rotation, float scale){
         this.anime = animation;
         this.x = x;
         this.y = y;
         this.batch = batch;
         this.flip = flip;
         this.rotation = rotation;
-        this.object = obj;
+        this.scale = scale;
         this.create();
     }
 
@@ -45,9 +44,9 @@ public class Animator{
         width = this.anime.getTexture().getWidth()/this.anime.getCols();
         height = this.anime.getTexture().getHeight()/this.anime.getRows();
         batch.draw(currentFrame, x, y,
-                (flip ? -1 : 1)*width*scale, height*scale,
-                width, height,
-                1f, 1f, rotation);
+                0, 0,
+                (flip ? -1 : 1)*width, height,
+                scale, scale, rotation);
     }
 
     public void dispose() {
@@ -74,7 +73,7 @@ public class Animator{
         return x;
     }
 
-    public void setRotation(float rotation) {
+    public void setRotation(int rotation) {
         this.rotation = rotation;
     }
 
@@ -82,8 +81,8 @@ public class Animator{
         return rotation;
     }
 
-    public Object getObject() {
-        return object;
+    public void setFlip(boolean flip) {
+        this.flip = flip;
     }
 
     private void create(){

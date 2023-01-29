@@ -1,38 +1,29 @@
 package pl.space_marine.game.bullets;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import static pl.space_marine.game.assets.Image.SHOTBULLET;
+
+import pl.space_marine.game.assets.Audio;
+import pl.space_marine.game.assets.Image;
 
 
 public class ShotBullet extends Bullet{
-    private Texture texture;
-    private Sound sound;
+    private Image image;
+    private Audio audio;
     private int power;
+
+    private float orientation = 0; //radiany, ale pomijamy pi, wiec -> (0-2) 0 - w gore     1 - w dol
 
     public ShotBullet(int x, int y, int power, float width, float height, float velocityY, float velocityX) {
         super(x, y, width, height, velocityY, velocityX);
         this.power = power;
-        this.texture = new Texture("Shotbullet.png");
-        this.sound = Gdx.audio.newSound(Gdx.files.internal(""));
+        this.image = SHOTBULLET;
+        this.audio = Audio.SHOTBULLET;
+    }
+    public Image getImage() {
+        return this.image;
+    }
+    public Audio getAudio() {
+        return this.audio;
     }
 
-    @Override
-    public void update() {
-        super.update();
-        sound.play();
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y);
-    }
-
-
-    @Override
-    public void dispose() {
-        texture.dispose();
-        sound.dispose();
-    }
 }

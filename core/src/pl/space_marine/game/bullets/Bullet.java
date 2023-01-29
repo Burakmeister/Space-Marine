@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
+import pl.space_marine.game.assets.Image;
+
 public abstract class Bullet extends Rectangle {
 
     // położenie pocisku
-    protected int x;
-    protected int y;
+    public int x;
+    public int y;
 
     // textura pocisku
     protected Texture texture;
@@ -21,14 +23,16 @@ public abstract class Bullet extends Rectangle {
     protected int power;
 
     // prędkość pocisku
-    protected float velocityX;
-    protected float velocityY;
+    public float velocityX;
+    public float velocityY;
 
     // rozmiar pocisku
     protected float width;
     protected float height;
+    private Image image;
 
-   // czy pocisk jest jeszcze na mapie
+    private float orientation = 0;
+    // czy pocisk jest jeszcze na mapie
     protected boolean isActive;
     public Bullet(int x, int y, float width, float height, float velocityY, float velocityX) {
         this.x = x;
@@ -40,22 +44,35 @@ public abstract class Bullet extends Rectangle {
         this.velocityX = velocityX;
         this.isActive = true;
     }
-
-    public void update() {
-        x += velocityX;
-        y += velocityY;
+    public void setY(int y) {
+        this.y = y;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public float getX() {
+        return x;
+    }
+    public float getY() {
+        return y;
+    }
+    public Image getImage() {
+        return image;
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y);
+    public void setImage(Image image) {
+        this.image = image;
     }
-
-    public void playSound() {
-        sound.play();
+    public void setOrientation(float orientation) {
+        this.orientation = orientation;
     }
-
-    public void dispose() {
-        texture.dispose();
-        sound.dispose();
+    public float getOrientation() {
+        return orientation;
+    }
+    public float getVelocityX() {
+        return velocityX;
+    }
+    public float getVelocityY() {
+        return velocityY;
     }
 }

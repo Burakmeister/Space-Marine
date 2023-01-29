@@ -16,7 +16,7 @@ public interface Builder {
     public void addDragon();
     public void moveHigher(int up);
     public void setX(int move);
-    public void setDirection(float direction);
+    public void setDirection(int direction);
     public void setSpeed(int speed);
     public void setCollisionDamage(float collisionDamage);
     public ImpedimentsIterator<Impediment> getResult();
