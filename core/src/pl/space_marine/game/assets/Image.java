@@ -17,10 +17,9 @@ public enum Image {
 
     ENGINE_FIRE("engine_fire.png", 2, 2),
 
-    ENGINE_FIRE("engine_fire.png", Direction.LEFT, 2, 2),
-    ARMOR("armor.png", Direction.LEFT),
+    ARMOR("armor.png"),
     // pociski
-    SHOTBULLET("Shotbullet.png", Direction.NONE),
+    SHOTBULLET("Shotbullet.png"),
     // tło
 
     BACKGROUND("bg.jpg"),

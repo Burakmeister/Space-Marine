@@ -184,7 +184,7 @@ public class Renderer extends State {
                 rocketBody.getMass() * (x * 300),//x force to apply
 
                 rocketBody.getMass() * (y * 300)),
-                rocketBody.getWorldPoint(new Vector2(SCALE*rocketSprite.getWidth()/2,0)), true);   //  , new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y), true);
+                rocketBody.getWorldPoint(new Vector2(SCALE*rocketSprite[rocket.getStages()[4].getLevel()].getWidth()/2,0)), true);   //  , new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y), true);
 
 
         //if booster to kolejny force
