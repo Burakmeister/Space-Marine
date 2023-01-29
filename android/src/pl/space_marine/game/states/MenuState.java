@@ -54,8 +54,8 @@ public class MenuState extends State {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("Button Pressed");
-                stage.clear();
-                gsm.set(new Renderer(gsm, stage));
+//                stage.clear();
+                gsm.push(new Renderer(gsm, stage));
             }
         });
     }

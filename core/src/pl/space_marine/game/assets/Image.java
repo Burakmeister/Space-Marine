@@ -12,7 +12,7 @@ public enum Image {
     TANK_STAGE("fuel_scale.png", Direction.NONE),
     ROCKET("rocket_scale.png", Direction.NONE),
     ENGINE_FIRE("engine_fire.png", Direction.LEFT, 2, 2),
-
+    ARMOR("armor.png", Direction.LEFT),
     // pociski
 
     // tło
@@ -27,13 +27,13 @@ public enum Image {
     BOOSTER("booster.png", Direction.NONE),
 
     //przeszkody
-    BIRD("bird_scale.png", Direction.LEFT, 3, 4),
+    BIRD("bird_scale_L.png", Direction.LEFT, 3, 4),
     DRAGON("dragon_scale.png", Direction.NONE, 1, 3),
     CLOUD("cloud_scale.png", Direction.NONE),
     CLOUD2("cloud_scale2.png", Direction.NONE),
     CLOUD3("cloud_scale3.png", Direction.NONE),
     METHEOR("metheor.png", Direction.NONE),
-    PLANE("plane_scale.png", Direction.RIGHT),
+    PLANE("plane_scale_L.png", Direction.RIGHT),
     BALLOON("balloon_scale.png", Direction.NONE),
     SPEED_GATE("speed_gate.png", Direction.NONE),
     SATELLITE("satellite_scale.png", Direction.NONE),

@@ -36,7 +36,7 @@
 		</fixture>
 	</body>
 
-	<body name="bird_scale">
+	<body name="bird_scale_L">
 		<is_dynamic/>
 		<linear_damping>0</linear_damping>
 		<angular_damping>0</angular_damping>
@@ -184,7 +184,7 @@
 		</fixture>
 	</body>
 
-	<body name="plane_scale">
+	<body name="plane_scale_L">
 		<is_dynamic/>
 		<linear_damping>0</linear_damping>
 		<angular_damping>0</angular_damping>

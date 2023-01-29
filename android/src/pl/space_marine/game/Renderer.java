@@ -17,8 +17,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Iterator;
-
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
@@ -28,6 +26,7 @@ import pl.space_marine.game.iterator.ImpedimentsIterator;
 import pl.space_marine.game.rocket.Rocket;
 import pl.space_marine.game.states.GameStateManager;
 import pl.space_marine.game.states.State;
+import pl.space_marine.game.states.UpgradesState;
 
 
 public class Renderer extends State {
@@ -85,6 +84,7 @@ public class Renderer extends State {
         body.setTransform(rocket.getX(), rocket.getY(), 0);
 
         this.rocketBody = body;
+
 //        this.rocketBody.applyForce();
         for (int i = 0; i < 200; i++) {
             game.drawImpediments();
@@ -95,6 +95,7 @@ public class Renderer extends State {
         rocketSprite.setPosition(rocket.getX(), rocket.getY());
         rocketSprite.setScale(SCALE);
         rocketSprite.setOrigin(0, 0);
+
         createGround();
 
 //        Vector2 vec = rocketBody.getPosition();
@@ -127,6 +128,15 @@ public class Renderer extends State {
             }
         }
 
+        if (Gdx.input.isTouched()) {
+            gsm.push(new UpgradesState(gsm, stage, rocket));
+//            gsm.pop();
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -152,11 +162,12 @@ public class Renderer extends State {
         rocket.setX((int) vec.x);
         rocket.setY((int) vec.y);
         rocketBody.setTransform(vec, (float) (Math.toRadians(rocket.getOrientation())));
-        float x = (float) Math.sin(rocketBody.getAngle());
+        float x = (float) Math.sin(rocketBody.getAngle() - Math.PI);
         float y = (float) Math.cos(rocketBody.getAngle());
         rocketBody.applyForce(new Vector2(
                         rocketBody.getMass() * (x * 300),//x force to apply
-                        rocketBody.getMass() * (y * 300)), new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y), true);
+                        rocketBody.getMass() * (y * 300)), rocketBody.getWorldPoint(new Vector2(SCALE*rocket.getImage().getTexture().getWidth()/2,-5)), true);   //  , new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y), true);
+
 
         //if paliwo jest
 //        rocketBody.applyForceToCenter(new Vector2(rocketBody.getMass() * x * (g + 20), rocketBody.getMass() * y * (g + 20)), true);
@@ -168,6 +179,8 @@ public class Renderer extends State {
         rocketSprite.setPosition(rocket.getX(), rocket.getY());
         rocketSprite.draw(sb);
         camera.update();// Ezunia its me bartolomeo
+
+
         sb.end();
         debugRenderer.render(world, camera.combined);
 //        stage.draw();

@@ -1,16 +1,12 @@
 package pl.space_marine.game.rocket;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.space_marine.game.Game;
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.bullets.Bullet;
 import pl.space_marine.game.rocket.stages.Avionic;
 import pl.space_marine.game.rocket.stages.Booster;
-import pl.space_marine.game.rocket.stages.CoreRocket;
 import pl.space_marine.game.rocket.stages.Engine;
 import pl.space_marine.game.rocket.stages.Gun;
 import pl.space_marine.game.rocket.stages.Stage;
@@ -29,7 +25,7 @@ public class Rocket {
     private int record;
 
     // dane rakiet: pozycja i ?armor?
-    private int armor;
+    private int armor = 0;
     private int x;
     private int y;
     private float orientation = 0; //radiany, ale pomijamy pi, wiec -> (0-2) 0 - w gore     1 - w dol
@@ -41,12 +37,15 @@ public class Rocket {
         this.stages = new Stage[]{
                 new Engine(),
                 new Avionic(),
-                new Booster(),
                 new Tank(),
                 new Gun(),
-                new CoreRocket()
+                new Booster()
         };
         this.image = Image.ROCKET;
+        for (int i = 0; i < 4; i++) {
+            this.stages[i].incrementLevel();
+        }
+        this.setAccountBalance(1000000);
     }
 
     public static Rocket getInstance(){
@@ -90,7 +89,19 @@ public class Rocket {
         this.accountBalance = accountBalance;
     }
 
+    public void buyUpgrade(int upgradeCost) {
+        this.accountBalance -= upgradeCost;
+    }
+
+    public void incrementArmor() {
+        this.armor++;
+    }
+
     public Stage[] getStages() {
         return stages;
+    }
+
+    public int getArmor() {
+        return armor;
     }
 }
