@@ -13,7 +13,9 @@ import pl.space_marine.game.impediments.obstacles.Meteor;
 import pl.space_marine.game.impediments.obstacles.Plane;
 import pl.space_marine.game.impediments.obstacles.Satelite;
 import pl.space_marine.game.impediments.obstacles.SpeedGate;
+import pl.space_marine.game.iterator.ImpedimentList;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
+import pl.space_marine.game.rocket.Rocket;
 
 public class DefaultBuilder implements Builder{
     private int y;
@@ -21,76 +23,83 @@ public class DefaultBuilder implements Builder{
     private float collisionDamage;
     private int direction;
     private int speed;
-    private ImpedimentsIterator list;
+    private ImpedimentsIterator<Impediment> list;
 
-    public DefaultBuilder(){
-        this.list = new ImpedimentsIterator();
+    public DefaultBuilder(Rocket rocket, int maxImpediments){
+        this.list = (ImpedimentsIterator<Impediment>) new ImpedimentList<Impediment>(rocket, maxImpediments).iterator();
         this.y=0;
     }
     @Override
-    public void addBird() {
-        this.list.add(new Bird(Image.BIRD, collisionDamage, direction, speed, x, y));
+    public void addBirdL() throws Exception {
+        this.list.add(new Bird(Image.BIRD_L, collisionDamage, direction, speed, x, y));
+    }
+    @Override
+    public void addBirdR() throws Exception {
+        this.list.add(new Bird(Image.BIRD_R, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addPlane() {
-        this.list.add(new Plane(Image.PLANE, collisionDamage, direction, speed, x, y));
+    public void addPlaneL() throws Exception {
+        this.list.add(new Plane(Image.PLANE_L, collisionDamage, direction, speed, x, y));
+    }
+    @Override
+    public void addPlaneR() throws Exception {
+        this.list.add(new Plane(Image.PLANE_R, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addCloud() {
+    public void addCloud() throws Exception {
         Random rand = new Random();
         switch(rand.nextInt(3)){
             case 0:
-                this.list.add(new Cloud(Image.CLOUD, collisionDamage, direction, speed, x, y));
+                this.list.add(new Cloud(Image.CLOUD, collisionDamage, direction, speed, x, y, rand.nextBoolean(), rand.nextInt(5)==0));
                 break;
             case 1:
-                this.list.add(new Cloud(Image.CLOUD2, collisionDamage, direction, speed, x, y));
+                this.list.add(new Cloud(Image.CLOUD2, collisionDamage, direction, speed, x, y, rand.nextBoolean(), rand.nextInt(5)==0));
                 break;
             case 2:
-                this.list.add(new Cloud(Image.CLOUD3, collisionDamage, direction, speed, x, y));
+                this.list.add(new Cloud(Image.CLOUD3, collisionDamage, direction, speed, x, y, rand.nextBoolean(), rand.nextInt(5)==0));
                 break;
         }
     }
 
     @Override
-    public void addBalloon() {
+    public void addBalloon() throws Exception {
         this.list.add(new Balloon(Image.BALLOON, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addSpeedGate() {
+    public void addSpeedGate() throws Exception {
         this.list.add(new SpeedGate(Image.SPEED_GATE, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addSatelite() {
+    public void addSatelite() throws Exception {
         this.list.add(new Satelite(Image.SATELLITE, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addMeteor() {
+    public void addMeteor() throws Exception {
         this.list.add(new Meteor(Image.METHEOR, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addDrone() {
+    public void addDrone() throws Exception {
         this.list.add(new Drone(Image.DRONE, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addUfo() {
+    public void addUfo() throws Exception {
         this.list.add(new Ufo(Image.UFO, collisionDamage, direction, speed, x, y));
     }
 
     @Override
-    public void addDragon() {
+    public void addDragon() throws Exception {
         this.list.add(new Dragon(Image.DRAGON, collisionDamage, direction, speed, x, y));
     }
-
     @Override
-    public void moveHigher(int up) {
-        this.y += up;
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override
@@ -116,9 +125,6 @@ public class DefaultBuilder implements Builder{
     @Override
     public ImpedimentsIterator<Impediment> getResult() {
         return this.list;
-    }
-    @Override
-    public void clear(){
     }
 
     @Override
