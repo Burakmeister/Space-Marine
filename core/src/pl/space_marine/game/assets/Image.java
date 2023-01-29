@@ -13,8 +13,9 @@ public enum Image {
     ROCKET("rocket_scale.png"),
     ENGINE_FIRE("engine_fire.png", 2, 2),
 
+    ARMOR("armor.png"),
     // pociski
-    SHOTBULLET("Shotbullet.png", Direction.NONE),
+    SHOTBULLET("Shotbullet.png"),
     // tło
 
     BACKGROUND("bg.jpg"),
