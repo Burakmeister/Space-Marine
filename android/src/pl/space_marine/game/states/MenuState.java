@@ -54,24 +54,12 @@ public class MenuState extends State {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("Button Pressed");
-//                stage.clear();
-//                gsm.pop();
                 gsm.set(new Renderer(gsm, stage));
             }
         });
     }
 
-    public void remakeScene() {
-        playButton.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed");
-//                stage.clear();
-//                gsm.pop();
-                gsm.push(new Renderer(gsm, stage));
-            }
-        });
-    }
+
 
     @Override
     public void handleInput() {
@@ -87,8 +75,7 @@ public class MenuState extends State {
 
     @Override
     public void update(float dt) {
-        handleInput();
-
+//        handleInput();
     }
 
     @Override
