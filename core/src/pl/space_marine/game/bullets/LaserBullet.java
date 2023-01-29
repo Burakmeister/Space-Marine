@@ -17,21 +17,4 @@ public class LaserBullet extends Bullet {
         this.sound = Gdx.audio.newSound(Gdx.files.internal(""));
     }
 
-    @Override
-    public void update() {
-        super.update();
-        sound.play();
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y);
-    }
-
-
-    @Override
-    public void dispose() {
-        texture.dispose();
-        sound.dispose();
-    }
 }

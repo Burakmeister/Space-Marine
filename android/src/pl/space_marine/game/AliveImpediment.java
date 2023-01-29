@@ -1,5 +1,7 @@
 package pl.space_marine.game;
 
+import static pl.space_marine.game.Renderer.SCALE;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,6 +13,7 @@ import com.codeandweb.physicseditor.PhysicsShapeCache;
 import pl.space_marine.game.Animator;
 import pl.space_marine.game.assets.Direction;
 import pl.space_marine.game.impediments.Impediment;
+import pl.space_marine.game.impediments.obstacles.Cloud;
 
 public class AliveImpediment {
     private Body body;
@@ -20,65 +23,56 @@ public class AliveImpediment {
 
     public AliveImpediment(Impediment impediment, SpriteBatch batch, PhysicsShapeCache bodiesCache, World world){
         this.impediment = impediment;
-        boolean flip = false;
-        if(impediment.getImage().getDirection() == Direction.LEFT){
-            impediment.setDirection(impediment.getDirection());
-            if(impediment.getDirection()>180){
-                flip=true;
-            }
-        } else if (impediment.getImage().getDirection() == Direction.RIGHT) {
-            impediment.setDirection(impediment.getDirection());
-            if(impediment.getDirection()<-180){
-                flip=true;
-            }
-        }
 
         if(impediment.getImage().getRows()==1 && impediment.getImage().getCols()==1){
             Sprite sprite = new Sprite(impediment.getImage().getTexture());
-            sprite.setScale(Renderer.SCALE);
+            sprite.setScale(SCALE);
             sprite.setPosition(impediment.getX(), impediment.getY());
-            sprite.setFlip(flip, false);
             this.drawer = sprite;
             isAnimation = false;
         }else{
-            this.drawer = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), flip, impediment.getDirection(), Renderer.SCALE);
+            this.drawer = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), false, 0, SCALE);
             isAnimation = true;
         }
 
         System.out.println(impediment.getImage().getName() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
+        if (impediment instanceof Cloud) {
+            Cloud cloud = (Cloud) impediment;
+            Sprite sprite = (Sprite) drawer;
+            sprite.setFlip(cloud.isFlip(), false);
+        }
 
-        body = bodiesCache.createBody(impediment.getImage().getName(), world, Renderer.SCALE,  Renderer.SCALE);
-        body.setTransform(impediment.getX(), impediment.getY(), (float) Math.toDegrees(impediment.getDirection()));
+        if(!(impediment instanceof Cloud)){
+            body = bodiesCache.createBody(impediment.getImage().getName(), world, SCALE,  SCALE);
+            body.setTransform(impediment.getX(), impediment.getY(), 0);
+//            body.setGravityScale(1);
+        }
     }
 
     public void update(){
-        Transform transform = body.getTransform();
-        impediment.setDirection((int) (Math.toDegrees(transform.getRotation())));
-        impediment.setX((int) transform.getPosition().x);
-        impediment.setY((int) transform.getPosition().y);
-        if(impediment.getSpeed()!=0){
-            float x = (float) Math.sin(body.getAngle()); // minus PI as objects start off facing right
-            float y = (float) Math.cos(body.getAngle());
-            int g=10;
-            body.applyForceToCenter(new Vector2(body.getMass() * (x * (g + impediment.getSpeed())), body.getMass() * (y * (g + impediment.getSpeed()))), true);
-//            body.setGravityScale(0);
+        if (!(impediment instanceof Cloud)) {
+            Transform transform = body.getTransform();
+            impediment.setX((int) transform.getPosition().x);
+            impediment.setY((int) transform.getPosition().y);
+
+            if(impediment.getSpeed()!=0){
+                float x = (float) Math.sin(body.getAngle() - Math.PI);
+                float y = (float) Math.cos(body.getAngle());
+
+                body.applyForceToCenter(new Vector2(
+                                body.getMass() * (x * impediment.getSpeed()),//x force to apply
+                                body.getMass() * (y * impediment.getSpeed())),
+                        true);
+            }
         }
 
         if(isAnimation){
             Animator anime = (Animator) this.drawer;
             anime.setX(impediment.getX());
             anime.setY(impediment.getY());
-//            if(needFlip(true)){
-//                anime.setFlip(true);
-//            }
         }else{
             Sprite sprite = (Sprite) this.drawer;
             sprite.setPosition(impediment.getX(), impediment.getY());
-            sprite.setRotation(impediment.getDirection());
-            sprite.setOrigin(0,0);
-//            if(needFlip(false)){
-//                sprite.flip(true, false);
-//            }
         }
     }
 
@@ -90,24 +84,6 @@ public class AliveImpediment {
             Animator drawer = (Animator) this.drawer;
             drawer.render();
         }
-    }
-
-    private boolean needFlip(boolean isAnimation){
-        switch(impediment.getImage().getDirection()){
-            case RIGHT:
-                if(impediment.getDirection()<0){
-                    impediment.getImage().setDirection(Direction.LEFT);
-                    return true;
-                }
-                break;
-            case LEFT:
-                if(impediment.getDirection()>0){
-                    impediment.getImage().setDirection(Direction.RIGHT);
-                    return true;
-                }
-                break;
-        }
-        return false;
     }
 
     public void dispose(){

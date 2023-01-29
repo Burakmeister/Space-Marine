@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 public enum Audio{
-    ENGINE("engine.wav");
+    //ENGINE("engine.wav"),
+
+    SHOTBULLET("sci-fi-gun-shot.wav");
 
     private Sound sound;
     private Audio(String source){
