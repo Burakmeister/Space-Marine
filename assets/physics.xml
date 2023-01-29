@@ -44,6 +44,7 @@
 			<polygon>367.0000, 47.0000, 464.0000, 182.0000, 334.0000, 49.0000</polygon>
 		</fixture>
 	</body>
+
 	<body name="drone_scale">
 		<is_dynamic/>
 		<linear_damping>0</linear_damping>
