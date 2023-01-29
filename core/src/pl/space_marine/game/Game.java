@@ -29,7 +29,7 @@ public class Game {
             int randInt = rand.nextInt(100);
             if(rocket.getY()<1500){
                 if(randInt<10){
-                    builder.setDirection(180);
+                    builder.setDirection(0);
                     builder.setSpeed(0);
                     builder.addDrone();
                 }else if(randInt<30){
@@ -48,10 +48,10 @@ public class Game {
                 }else{
                     if(randInt<75){
                         builder.setDirection(90);
-                        builder.setSpeed(rand.nextInt(3));
+                        builder.setSpeed(0);
                     }else{
                         builder.setDirection(-90);
-                        builder.setSpeed(rand.nextInt(3));
+                        builder.setSpeed(0);
                     }
                     builder.addCloud();
                 }
@@ -85,10 +85,10 @@ public class Game {
                 }else{
                     if(randInt<75){
                         builder.setDirection(90);
-                        builder.setSpeed(rand.nextInt(3));
+                        builder.setSpeed(0);
                     }else{
                         builder.setDirection(-90);
-                        builder.setSpeed(rand.nextInt(3));
+                        builder.setSpeed(0);
                     }
                     builder.addCloud();
                 }

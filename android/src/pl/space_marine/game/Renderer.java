@@ -24,7 +24,6 @@ import com.codeandweb.physicseditor.PhysicsShapeCache;
 
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Impediment;
-import pl.space_marine.game.iterator.ImpedimentList;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
 import pl.space_marine.game.rocket.Rocket;
 import pl.space_marine.game.states.GameStateManager;
@@ -162,7 +161,7 @@ public class Renderer extends State {
         rocket.setX((int) vec.x);
         rocket.setY((int) vec.y);
 
-        if(rocket.getOrientation()==0 && rocketBody.getAngle()<0.01 && rocketBody.getAngle()>-0.01){
+        if(rocket.getOrientation()==0 && rocketBody.getAngle()<0.03 && rocketBody.getAngle()>-0.03){
             rocketBody.setTransform(vec, 0);
         }else{
             rocketBody.setTransform(vec, (float) (rocketBody.getAngle()+Math.toRadians(rocket.getOrientation())));

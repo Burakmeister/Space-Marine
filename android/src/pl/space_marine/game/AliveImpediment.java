@@ -21,41 +21,37 @@ public class AliveImpediment {
     private Object drawer;
     private boolean isAnimation;
 
-    public AliveImpediment(Impediment impediment, SpriteBatch batch, PhysicsShapeCache bodiesCache, World world){
+    public AliveImpediment(Impediment impediment, SpriteBatch batch, PhysicsShapeCache bodiesCache, World world) {
         this.impediment = impediment;
 
-        if(impediment.getImage().getRows()==1 && impediment.getImage().getCols()==1){
+        if (impediment.getImage().getRows() == 1 && impediment.getImage().getCols() == 1) {
             Sprite sprite = new Sprite(impediment.getImage().getTexture());
-            sprite.setScale(SCALE);
             sprite.setPosition(impediment.getX(), impediment.getY());
+            sprite.setScale(SCALE);
+            sprite.setOrigin(0,0);
             this.drawer = sprite;
             isAnimation = false;
-        }else{
+        } else {
             this.drawer = new Animator(batch, impediment.getImage(), impediment.getX(), impediment.getY(), false, 0, SCALE);
             isAnimation = true;
         }
 
         System.out.println(impediment.getImage().getName() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
-        if (impediment instanceof Cloud) {
+
+        if (!(impediment instanceof Cloud)) {
+            body = bodiesCache.createBody(impediment.getImage().getName(), world, SCALE, SCALE);
+            body.setTransform(impediment.getX(), impediment.getY(), 0);
+//            body.setGravityScale(1);
+        }else{
             Cloud cloud = (Cloud) impediment;
             Sprite sprite = (Sprite) drawer;
             sprite.setFlip(cloud.isFlip(), false);
         }
-
-        if(!(impediment instanceof Cloud)){
-            body = bodiesCache.createBody(impediment.getImage().getName(), world, SCALE,  SCALE);
-            body.setTransform(impediment.getX(), impediment.getY(), 0);
-//            body.setGravityScale(1);
-        }
     }
 
-    public void update(){
+    public void update() {
         if (!(impediment instanceof Cloud)) {
-            Transform transform = body.getTransform();
-            impediment.setX((int) transform.getPosition().x);
-            impediment.setY((int) transform.getPosition().y);
-
-            if(impediment.getSpeed()!=0){
+            if (impediment.getSpeed() != 0) {
                 float x = (float) Math.sin(body.getAngle() - Math.PI);
                 float y = (float) Math.cos(body.getAngle());
 
@@ -64,30 +60,39 @@ public class AliveImpediment {
                                 body.getMass() * (y * impediment.getSpeed())),
                         true);
             }
-        }
 
-        if(isAnimation){
-            Animator anime = (Animator) this.drawer;
-            anime.setX(impediment.getX());
-            anime.setY(impediment.getY());
+            impediment.setX((int) body.getPosition().x);
+            impediment.setY((int) body.getPosition().y);
+
+            if (isAnimation) {
+                Animator anime = (Animator) this.drawer;
+                anime.setX(impediment.getX());
+                anime.setY(impediment.getY());
+                anime.setRotation((int) Math.toDegrees(body.getAngle()));
+            } else {
+                Sprite sprite = (Sprite) this.drawer;
+                sprite.setPosition(impediment.getX(), impediment.getY());
+                sprite.setRotation((float) Math.toDegrees(body.getAngle()));
+            }
+
         }else{
-            Sprite sprite = (Sprite) this.drawer;
-            sprite.setPosition(impediment.getX(), impediment.getY());
+            ((Sprite) drawer).setPosition(impediment.getX(), impediment.getY());
         }
     }
 
-    public void draw(SpriteBatch sb){
-        if(drawer instanceof Sprite){
+    public void draw(SpriteBatch sb) {
+        if (drawer instanceof Sprite) {
             Sprite drawer = (Sprite) this.drawer;
+//            System.out.println("Sprite: " + drawer.getX);
             drawer.draw(sb);
-        }else{
+        } else {
             Animator drawer = (Animator) this.drawer;
             drawer.render();
         }
     }
 
-    public void dispose(){
-        if(this.drawer instanceof Animator){
+    public void dispose() {
+        if (this.drawer instanceof Animator) {
             Animator anime = (Animator) this.drawer;
             anime.dispose();
         }
