@@ -146,10 +146,8 @@ public class Renderer extends State {
             } else {
                 State render = gsm.getStates().lastElement();
                 gsm.pop();
-                System.out.println(render);
                 State upgrades = gsm.getStates().peek();
                 ((UpgradesState) upgrades).makeUpgradesComponents();
-                System.out.println(upgrades);
                 gsm.pop();
                 gsm.getStates().push(render);
                 gsm.getStates().push(upgrades);
