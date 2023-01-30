@@ -36,6 +36,7 @@ public class Rocket {
     private int y;
 
     private float HP = 1;
+    private float fuel = 1;
     private float orientation = 0; //radiany, ale pomijamy pi, wiec -> (0-2) 0 - w gore     1 - w dol
 
     private Image image;
@@ -167,5 +168,9 @@ public class Rocket {
         minusHp+=armor*0.05f;
         if(minusHp>0)
             this.HP-=minusHp;
+    }
+
+    public float getFuel() {
+        return fuel;
     }
 }
