@@ -23,26 +23,16 @@ public abstract class Bullet extends Rectangle {
     protected int power;
 
     // prędkość pocisku
-    public float velocityX;
-    public float velocityY;
 
     // rozmiar pocisku
-    protected float width;
-    protected float height;
     private Image image;
 
     private float orientation = 0;
-    // czy pocisk jest jeszcze na mapie
-    protected boolean isActive;
-    public Bullet(int x, int y, float width, float height, float velocityY, float velocityX) {
+    public Bullet(int x, int y, int power, Image image) {
         this.x = x;
         this.y = y;
-
-        this.width = width;
-        this.height = height;
-        this.velocityY = velocityY;
-        this.velocityX = velocityX;
-        this.isActive = true;
+        this.power = power;
+        this.image = image;
     }
     public void setY(int y) {
         this.y = y;
@@ -62,17 +52,5 @@ public abstract class Bullet extends Rectangle {
 
     public void setImage(Image image) {
         this.image = image;
-    }
-    public void setOrientation(float orientation) {
-        this.orientation = orientation;
-    }
-    public float getOrientation() {
-        return orientation;
-    }
-    public float getVelocityX() {
-        return velocityX;
-    }
-    public float getVelocityY() {
-        return velocityY;
     }
 }

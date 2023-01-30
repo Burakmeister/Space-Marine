@@ -20,14 +20,18 @@ public class Rocket {
     private List<Bullet> bullets;
     private Stage[] stages;
 
+
     // dane użytkownika: stan konta i rekord
     private int accountBalance = 0;
     private int record;
+
 
     // dane rakiet: pozycja i ?armor?
     private int armor = 0;
     private int x;
     private int y;
+
+    private float HP = 1;
     private float orientation = 0; //radiany, ale pomijamy pi, wiec -> (0-2) 0 - w gore     1 - w dol
 
     private Image image;
@@ -72,7 +76,6 @@ public class Rocket {
         return y;
     }
 
-
     public float getOrientation() {
         return orientation;
     }
@@ -116,5 +119,23 @@ public class Rocket {
             case  3:
                 this.image = Image.ROCKET3;
         }
+    }
+
+    public List<Bullet> getBullets() {
+        return bullets;
+    }
+
+    public float getHP() {
+        return HP;
+    }
+
+    public void setHP(float HP) {
+        this.HP = HP;
+    }
+
+    public void looseHP(float minusHp){
+        minusHp+=armor*0.05f;
+        if(minusHp>0)
+            this.HP-=minusHp;
     }
 }
