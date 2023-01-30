@@ -27,7 +27,6 @@ public abstract class Impediment {
         this.speed = speed;
         this.x=x;
         this.y=y;
-
     }
     public boolean isCollisionWithRocket() {
         return true;
@@ -86,5 +85,20 @@ public abstract class Impediment {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public void setHP(float HP) {
+        this.HP = HP;
+    }
+
+    public void looseHP(float HP) {
+        this.HP-=HP;
+    }
+    public float getHP() {
+        return HP;
+    }
+
+    public float getCollisionDamage() {
+        return collisionDamage;
     }
 }

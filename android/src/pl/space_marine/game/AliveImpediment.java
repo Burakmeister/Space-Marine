@@ -41,6 +41,7 @@ public class AliveImpediment {
         if (!(impediment instanceof Cloud)) {
             body = bodiesCache.createBody(impediment.getImage().getName(), world, SCALE, SCALE);
             body.setTransform(impediment.getX(), impediment.getY(), 0);
+            body.setUserData(impediment);
 //            body.setGravityScale(1);
         }else{
             Cloud cloud = (Cloud) impediment;
@@ -112,5 +113,9 @@ public class AliveImpediment {
 
     public boolean isAnimation() {
         return isAnimation;
+    }
+
+    public void removeBody(World world){
+        world.destroyBody(body);
     }
 }

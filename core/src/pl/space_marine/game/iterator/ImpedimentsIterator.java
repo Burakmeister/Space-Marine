@@ -36,6 +36,11 @@ public class ImpedimentsIterator<E> implements Iterator<E> {
 
     @Override
     public void remove(){
+        for(int i=cursor ; i<trueLength-1 ; i++){
+            tab[i]=tab[i+1];
+        }
+        this.tab[trueLength-1]=null;
+        trueLength--;
     }
 
 

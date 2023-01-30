@@ -5,17 +5,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import pl.space_marine.game.assets.Image;
+
 public class EDMBullet extends Bullet {
-    private Texture texture;
-    private Sound sound;
-    private int power;
-
-    public EDMBullet(int x, int y, Texture texture, Sound sound, int power, float width, float height, float velocityY, float velocityX) {
-        super(x, y, width, height, velocityY, velocityX);
-        this.power = power;
-        this.texture = new Texture("");
-        this.sound = Gdx.audio.newSound(Gdx.files.internal(""));
+    public EDMBullet(int x, int y, Image image) {
+        super(x, y, 4, image);
     }
-
-
 }
