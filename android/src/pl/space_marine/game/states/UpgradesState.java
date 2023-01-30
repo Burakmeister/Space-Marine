@@ -279,7 +279,6 @@ public class UpgradesState extends State {
                 gsm.pop();
                 gsm.getStates().push(upgrades);
                 gsm.getStates().push(render);
-
             }
         });
     }

@@ -1,10 +1,14 @@
 package pl.space_marine.game.rocket;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.bullets.Bullet;
+import pl.space_marine.game.listener.DefaulRocketShotListener;
+import pl.space_marine.game.listener.Listener;
 import pl.space_marine.game.rocket.stages.Avionic;
 import pl.space_marine.game.rocket.stages.Booster;
 import pl.space_marine.game.rocket.stages.Engine;
@@ -36,6 +40,7 @@ public class Rocket {
     private float orientation = 0; //radiany, ale pomijamy pi, wiec -> (0-2) 0 - w gore     1 - w dol
 
     private Image image;
+    private Set<Listener> listeners;
 
     private Rocket(){
         this.bullets = new ArrayList<>();
@@ -51,6 +56,8 @@ public class Rocket {
             this.stages[i].incrementLevel();
         }
         this.setAccountBalance(1000000);
+
+        this.listeners = new HashSet<>();
     }
 
     public static Rocket getInstance(){
@@ -59,6 +66,9 @@ public class Rocket {
 
     // strzelanie
     public void shot(){
+        System.out.println("peeew peeew");
+
+        notifyListeners();
         //not implemented yet
     }
     public Image getImage() {
@@ -119,6 +129,26 @@ public class Rocket {
                 break;
             case  3:
                 this.image = Image.ROCKET3;
+        }
+    }
+
+    public void attach(DefaulRocketShotListener listener)
+    {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void detach(DefaulRocketShotListener listener)
+    {
+        if (listeners.contains(listener)) {
+            listeners.remove(listener);
+        }
+    }
+
+    public void notifyListeners(){
+        for(Listener o: listeners) {
+            o.update(rocket.getX(), rocket.getY());
         }
     }
 

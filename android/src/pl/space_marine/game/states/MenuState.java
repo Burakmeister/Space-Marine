@@ -59,13 +59,37 @@ public class MenuState extends State {
         });
     }
 
+    public void setInputProcessor(Stage stage) {
+        Gdx.input.setInputProcessor(stage);
+        System.out.println("dddddd");
+    }
 
+
+    public void setListenerPlay() {
+        playButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("Button Pressed");
+                State render = gsm.getStates().lastElement();
+                gsm.pop();
+                State menu = gsm.getStates().lastElement();
+                gsm.pop();
+                gsm.getStates().push(menu);
+                gsm.getStates().push(render);
+            }
+        });
+    }
 
     @Override
     public void handleInput() {
-//        if(Gdx.input.isTouched()) {
-//            gsm.set(new PlayState(gsm));
-//        }
+        if(Gdx.input.isTouched()) {
+            State render = gsm.getStates().lastElement();
+            gsm.pop();
+            State menu = gsm.getStates().lastElement();
+            gsm.pop();
+            gsm.getStates().push(menu);
+            gsm.getStates().push(render);
+        }
 //        try {
 //            Thread.sleep(100);
 //        } catch (InterruptedException e) {

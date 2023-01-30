@@ -11,6 +11,8 @@ import pl.space_marine.game.bullets.factories.ShotBulletCreator;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.iterator.ImpedimentList;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
+import pl.space_marine.game.listener.DefaulRocketShotListener;
+import pl.space_marine.game.listener.Listener;
 import pl.space_marine.game.rocket.Rocket;
 
 public class Game {
@@ -20,10 +22,12 @@ public class Game {
 
     private Builder builder;
     private Rocket rocket = Rocket.getInstance();
+    private Listener shotListener;
     private BulletCreator bulletCreator;
 
     public Game() {
         this.builder = new DefaultBuilder(rocket, MAX_IMPEDIMENTS_ON_SCREEN);
+        this.shotListener = new DefaulRocketShotListener(builder.getResult());
         switch(rocket.getStages()[3].getLevel()){
             case 1:
                 this.bulletCreator = new ShotBulletCreator(rocket);
@@ -145,13 +149,16 @@ public class Game {
         return null;
     }
 
-    public void shot(){
-        Bullet toDelete = bulletCreator.createBullet();
-        this.rocket.getBullets().add(toDelete);
+    public Bullet shot(){
+        return bulletCreator.createBullet();
     }
 
 
     public Rocket getRocket() {
         return rocket;
+    }
+
+    public Listener getShotListener() {
+        return shotListener;
     }
 }

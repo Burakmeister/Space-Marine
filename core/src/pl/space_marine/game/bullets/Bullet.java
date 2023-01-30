@@ -13,9 +13,6 @@ public abstract class Bullet extends Rectangle {
     public int x;
     public int y;
 
-    // textura pocisku
-    protected Texture texture;
-
     // dzwiek pocisku
     protected Sound sound;
 
@@ -26,6 +23,9 @@ public abstract class Bullet extends Rectangle {
 
     // rozmiar pocisku
     private Image image;
+
+    private boolean used = false;
+    private boolean hitted = false;
 
     private float orientation = 0;
     public Bullet(int x, int y, int power, Image image) {
@@ -52,5 +52,21 @@ public abstract class Bullet extends Rectangle {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
+    public boolean isHitted() {
+        return hitted;
+    }
+
+    public void setHitted(boolean hitted) {
+        this.hitted = hitted;
     }
 }

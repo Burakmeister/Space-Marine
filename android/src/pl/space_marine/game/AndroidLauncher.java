@@ -28,6 +28,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useAccelerometer = true;
 		config.useCompass = false;
 		config.useGyroscope = false;
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		initialize(new App(), config);
 	}
 }
