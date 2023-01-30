@@ -34,16 +34,16 @@ public abstract class Impediment {
         //return false;
     }
     // efekt wywołany na rakiecie przy kolizji
-    public void collisionEffect(CollisionType collisionType){
-            switch(collisionType) {
-                case ROCKET:
-                    listener.update(this, CollisionType.ROCKET);
-                    break;
-                case IMPEDIMENT:
-                    listener.update(this, CollisionType.IMPEDIMENT);
-                    break;
-            }
-    }
+//    public void collisionEffect(CollisionType collisionType){
+//            switch(collisionType) {
+//                case ROCKET:
+//                    listener.update(this, CollisionType.ROCKET);
+//                    break;
+//                case IMPEDIMENT:
+//                    listener.update(this, CollisionType.IMPEDIMENT);
+//                    break;
+//            }
+//    }
 
 //    public void notifyListeners(){
 //

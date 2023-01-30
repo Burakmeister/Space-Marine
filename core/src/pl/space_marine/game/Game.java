@@ -7,6 +7,8 @@ import pl.space_marine.game.builder.DefaultBuilder;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.iterator.ImpedimentList;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
+import pl.space_marine.game.listener.DefaulRocketShotListener;
+import pl.space_marine.game.listener.Listener;
 import pl.space_marine.game.rocket.Rocket;
 
 public class Game {
@@ -15,9 +17,11 @@ public class Game {
 
     private Builder builder;
     private Rocket rocket = Rocket.getInstance();
+    private Listener shotListener;
 
     public Game() {
         this.builder = new DefaultBuilder(rocket, MAX_IMPEDIMENTS_ON_SCREEN);
+        this.shotListener = new DefaulRocketShotListener(builder.getResult());
     }
 
     public ImpedimentsIterator<Impediment> drawImpediments() {
@@ -121,5 +125,9 @@ public class Game {
 
     public Rocket getRocket() {
         return rocket;
+    }
+
+    public Listener getShotListener() {
+        return shotListener;
     }
 }

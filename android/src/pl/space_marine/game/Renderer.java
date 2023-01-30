@@ -26,6 +26,7 @@ import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.iterator.ImpedimentList;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
+import pl.space_marine.game.listener.DefaulRocketShotListener;
 import pl.space_marine.game.rocket.Rocket;
 import pl.space_marine.game.states.GameStateManager;
 import pl.space_marine.game.states.State;
@@ -67,6 +68,7 @@ public class Renderer extends State {
 
         rocket.setX(Gdx.graphics.getWidth() / 2 - Image.ROCKET.getTexture().getWidth() / 2);
         rocket.setY(0);
+        rocket.attach((DefaulRocketShotListener) this.game.getShotListener());
 
         camera = new OrthographicCamera(300, 600);
         viewport = new ExtendViewport(5000, 5000, camera);
@@ -124,7 +126,8 @@ public class Renderer extends State {
             if (x < 1 && x > -1) {
                 rocket.setOrientation(0);
             }
-        } if (Gdx.input.isTouched() && Gdx.input.getY() < Gdx.graphics.getHeight()/2) {
+        } if (Gdx.input.isTouched() && Gdx.input.getY() < Gdx.graphics.getHeight()/2)
+        {
             if (!hasUpdates) {
                 gsm.push(new UpgradesState(gsm, stage, rocket));
                 hasUpdates = true;
@@ -139,6 +142,8 @@ public class Renderer extends State {
                 gsm.getStates().push(render);
                 gsm.getStates().push(upgrades);
             }
+        } else  if (Gdx.input.isTouched() && Gdx.input.getY() > Gdx.graphics.getHeight()/2){
+            rocket.shot();
         }
 
     }
