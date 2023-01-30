@@ -8,8 +8,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import pl.space_marine.game.assets.Image;
 
 public class LaserBullet extends Bullet {
-    public LaserBullet(int x, int y, Image image) {
-        super(x, y, 2, image);
+
+    private Sound sound;
+    public LaserBullet(int x, int y) {
+        super(x, y, 2, Image.SHOTBULLET);
+        this.sound = Gdx.audio.newSound(Gdx.files.internal("shot_laser.mp3"));
+
     }
 
+    public Sound getSound() {
+        return sound;
+    }
 }

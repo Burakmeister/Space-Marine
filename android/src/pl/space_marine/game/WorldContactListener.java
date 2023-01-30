@@ -57,35 +57,35 @@ public class WorldContactListener implements ContactListener {
 
 
             if (impediment instanceof Dragon) {
-                impediment.looseHP(1);
+                impediment.looseHP(0.2f);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Drone) {
-                impediment.looseHP(1);
+                impediment.looseHP(0.2f);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Ufo) {
-                impediment.looseHP(1);
+                impediment.looseHP(0.2f);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Balloon) {
-                impediment.looseHP(1);
+                impediment.looseHP(0.5f);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Bird) {
                 impediment.looseHP(1);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Cloud) {
-                impediment.looseHP(1);
+//                impediment.looseHP(1);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Meteor) {
-                impediment.looseHP(1);
+                impediment.looseHP(0.1f);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Plane) {
-                impediment.looseHP(1);
+                impediment.looseHP(0.5f);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof Satelite) {
-                impediment.looseHP(1);
+                impediment.looseHP(0.5f);
                 rocket.looseHP(impediment.getCollisionDamage());
             } else if (impediment instanceof SpeedGate) {
-                impediment.looseHP(1);
-                rocket.looseHP(impediment.getCollisionDamage());
+//                impediment.looseHP(1);
+//                rocket.looseHP(impediment.getCollisionDamage());
             }
         }
 
@@ -102,24 +102,26 @@ public class WorldContactListener implements ContactListener {
                 bullet = (Bullet) body1.getUserData();
             }
 
+            bullet.setHitted(true);
+
             if (impediment instanceof Dragon) {
-
+                impediment.looseHP(0.1f);
             } else if (impediment instanceof Drone) {
-
+                impediment.looseHP(0.1f);
             } else if (impediment instanceof Ufo) {
-
+                impediment.looseHP(0.1f);
             } else if (impediment instanceof Balloon) {
-
+                impediment.looseHP(0.5f);
             } else if (impediment instanceof Bird) {
-
+                impediment.looseHP(1);
             } else if (impediment instanceof Cloud) {
 
             } else if (impediment instanceof Meteor) {
-
+                impediment.looseHP(0.34f);
             } else if (impediment instanceof Plane) {
-
+                impediment.looseHP(0.5f);
             } else if (impediment instanceof Satelite) {
-
+                impediment.looseHP(0.5f);
             } else if (impediment instanceof SpeedGate) {
 
             }
@@ -131,7 +133,7 @@ public class WorldContactListener implements ContactListener {
             Rocket rocket = null;
             Bullet bullet = null;
 
-            if (body1.getUserData() instanceof Impediment) {
+            if (body1.getUserData() instanceof Rocket) {
                 rocket = (Rocket) body1.getUserData();
                 bullet = (Bullet) body2.getUserData();
             } else if (body1.getUserData() instanceof Rocket) {

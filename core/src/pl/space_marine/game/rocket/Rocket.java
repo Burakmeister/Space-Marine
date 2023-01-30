@@ -66,6 +66,7 @@ public class Rocket {
     // strzelanie
     public void shot(){
         System.out.println("peeew peeew");
+
         notifyListeners();
         //not implemented yet
     }

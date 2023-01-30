@@ -149,9 +149,8 @@ public class Game {
         return null;
     }
 
-    public void shot(){
-        Bullet toDelete = bulletCreator.createBullet();
-        this.rocket.getBullets().add(toDelete);
+    public Bullet shot(){
+        return bulletCreator.createBullet();
     }
 
 
