@@ -23,14 +23,15 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
 import pl.space_marine.game.assets.Image;
+import pl.space_marine.game.bullets.Bullet;
 import pl.space_marine.game.impediments.Impediment;
-import pl.space_marine.game.iterator.ImpedimentList;
 import pl.space_marine.game.iterator.ImpedimentsIterator;
 import pl.space_marine.game.listener.DefaulRocketShotListener;
 import pl.space_marine.game.rocket.Rocket;
 import pl.space_marine.game.states.GameStateManager;
 import pl.space_marine.game.states.State;
 import pl.space_marine.game.states.UpgradesState;
+import pl.space_marine.game.WorldContactListener;
 
 
 public class Renderer extends State {
@@ -52,11 +53,16 @@ public class Renderer extends State {
     private ImpedimentsIterator iterator;
 
     private Body ground;
+    private WorldContactListener contact;
 
     private int g = 10;
     private boolean hasUpdates = false;
+    private boolean isStarted = false;
+    private  boolean gameover = false;
 
     private BitmapFont height = new BitmapFont();
+
+    private int time=0;
 
     public Renderer(GameStateManager gsm, Stage stage) {
         super(gsm, stage);
@@ -65,6 +71,7 @@ public class Renderer extends State {
         this.game = new Game();
         this.rocket = game.getRocket();
         this.impediments = new Array<>();
+        this.contact = new WorldContactListener();
 
         rocket.setX(Gdx.graphics.getWidth() / 2 - Image.ROCKET.getTexture().getWidth() / 2);
         rocket.setY(0);
@@ -85,7 +92,11 @@ public class Renderer extends State {
         this.bodiesCache = new PhysicsShapeCache(Gdx.files.internal("physics.xml"));
 
         Body body = bodiesCache.createBody(rocket.getImage().getName(), world, SCALE, SCALE);
+
         body.setType(BodyDef.BodyType.DynamicBody);
+        body.setUserData(rocket);
+        FixtureDef fixtureDef = new FixtureDef();
+//        body.createFixture(fixtureDef).setUserData(rocket);
         body.setTransform(rocket.getX(), rocket.getY(), 0);
 
         this.rocketBody = body;
@@ -106,6 +117,10 @@ public class Renderer extends State {
             sprite.setY((int) vec.y);
             sprite.setScale(SCALE);
         }
+        this.world.setContactListener(contact);
+//        for(Bullet bullet:rocket.getBullets()){
+//
+//        }
 
         createGround();
     }
@@ -113,9 +128,7 @@ public class Renderer extends State {
 
     @Override
     public void handleInput() {
-//        float rotation = rocket.getOrientation();
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
-            // Get the current accelerometer values
             float x = Gdx.input.getAccelerometerX();
             try {
                 Thread.sleep(50);
@@ -144,8 +157,16 @@ public class Renderer extends State {
             }
         } else  if (Gdx.input.isTouched() && Gdx.input.getY() > Gdx.graphics.getHeight()/2){
             rocket.shot();
+        }if(Gdx.input.isTouched() && Gdx.input.getY()>Gdx.graphics.getHeight()/2){
+            gsm.push(new UpgradesState(gsm, stage, rocket));
+        }else if(Gdx.input.isTouched() && Gdx.input.getY()<Gdx.graphics.getHeight()/2){
+            if(!gameover && isStarted)
+                game.shot();
+            else{
+                gameover = false;
+                isStarted = true;
+            }
         }
-
     }
 
     @Override
@@ -155,58 +176,78 @@ public class Renderer extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-        sb.setProjectionMatrix(camera.combined);
-        camera.position.set(rocket.getX(), (float) (rocket.getY() + rocket.getImage().getTexture().getHeight() * 0.6), 0); //Ezunia its me bartolomeo
-        sb.begin();
+        if(!gameover && isStarted){
+            sb.setProjectionMatrix(camera.combined);
+            camera.position.set(rocket.getX(), (float) (rocket.getY() + rocket.getImage().getTexture().getHeight() * 0.6), 0); //Ezunia its me bartolomeo
+            sb.begin();
 
-        height.draw(sb, "Height: " + rocket.getY(), rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight() * 0.1));
-        next();
-        for (AliveImpediment alive : this.impediments) {
-            alive.update();
-            alive.draw(sb);
-        }
+            height.draw(sb, "Height: " + rocket.getY(), rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight() * 0.1));
+            next();
+            for (AliveImpediment alive : this.impediments) {
+                alive.update();
+                alive.draw(sb);
+            }
 
-        Vector2 vec = rocketBody.getPosition();
-        rocket.setX((int) vec.x);
-        rocket.setY((int) vec.y);
+            Vector2 vec = rocketBody.getPosition();
+            rocket.setX((int) vec.x);
+            rocket.setY((int) vec.y);
 
-        if(rocket.getOrientation()==0 && rocketBody.getAngle()<0.01 && rocketBody.getAngle()>-0.01){
-            rocketBody.setTransform(vec, 0);
-        }else{
-            rocketBody.setTransform(vec, (float) (rocketBody.getAngle()+Math.toRadians(rocket.getOrientation())));
-            rocket.setOrientation(0);
-        }
+            if(rocket.getOrientation()==0 && rocketBody.getAngle()<0.03 && rocketBody.getAngle()>-0.03){
+                rocketBody.setTransform(vec, 0);
+            }else{
+                rocketBody.setTransform(vec, (float) (rocketBody.getAngle()+Math.toRadians(rocket.getOrientation())));
+                rocket.setOrientation(0);
+            }
 
-        float x = (float) Math.sin(rocketBody.getAngle() - Math.PI);
-        float y = (float) Math.cos(rocketBody.getAngle());
+            float x = (float) Math.sin(rocketBody.getAngle() - Math.PI);
+            float y = (float) Math.cos(rocketBody.getAngle());
 //        System.out.println(rocketBody.getAngle());
 
-        rocketBody.applyForce(new Vector2(
-                rocketBody.getMass() * (x * 300),//x force to apply
-                rocketBody.getMass() * (y * 300)),
-                rocketBody.getWorldPoint(new Vector2(SCALE*rocketSprite[rocket.getStages()[4].getLevel()].getWidth()/2,0)), true);   //  , new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y), true);
+            rocketBody.applyForce(new Vector2(
+                            rocketBody.getMass() * (x * 300),//x force to apply
+                            rocketBody.getMass() * (y * 300)),
+                    rocketBody.getWorldPoint(new Vector2(SCALE*rocketSprite[rocket.getStages()[4].getLevel()].getWidth()/2,0)), true);   //  , new Vector2(rocketBody.getWorldCenter().x, rocketBody.getWorldCenter().y), true);
 
 
-        //if booster to kolejny force
-        //trzeba ogarnac jak dziala masa etc.
+            rocketSprite[rocket.getStages()[4].getLevel()].setRotation((float) Math.toDegrees(rocketBody.getAngle()));
+            rocketSprite[rocket.getStages()[4].getLevel()].setPosition(rocket.getX(), rocket.getY());
+            rocketSprite[rocket.getStages()[4].getLevel()].draw(sb);
 
-        rocketSprite[rocket.getStages()[4].getLevel()].setRotation((float) Math.toDegrees(rocketBody.getAngle()));
-        rocketSprite[rocket.getStages()[4].getLevel()].setPosition(rocket.getX(), rocket.getY());
-        rocketSprite[rocket.getStages()[4].getLevel()].draw(sb);
+            time=time%10;
 
-//        rocketSprite.setRotation((float) Math.toDegrees(rocketBody.getAngle()));
-//        rocketSprite.setPosition(rocket.getX(), rocket.getY());
-//        rocketSprite.draw(sb);
+            if(time==0){
+                iterator = game.drawImpediments();
+                getImpediments(sb);
+                game.shot();
+            }
+            time++;
 
-        if(rocket.getY()%10==0){
-            iterator = game.drawImpediments();
-            getImpediments(sb);
+            iterator.refreshCursor();
+            for(;iterator.hasNext();){
+                Impediment imp = (Impediment) iterator.next();
+                if(imp.getHP()<=0){
+                    System.out.println("usuwam: " + imp);
+                    for(AliveImpediment ai : impediments){
+                        if(ai.getImpediment().equals(imp)){
+                            System.out.println("usuwam: " + ai.getImpediment().getClass());
+                            ai.removeBody(world);
+                            this.impediments.removeValue(ai, false);
+                        }
+                    }
+                    iterator.remove();
+                }
+            }
+
+            sb.end();
+
+            if(rocket.getHP()<=0){
+                gameover = true;
+            }
+
+            camera.update();// Ezunia its me bartolomeo
+            debugRenderer.render(world, camera.combined);
         }
 
-        sb.end();
-
-        camera.update();// Ezunia its me bartolomeo
-        debugRenderer.render(world, camera.combined);
     }
 
     @Override
@@ -224,8 +265,8 @@ public class Renderer extends State {
         while (iterator.hasNext()) {
             found = false;
             Impediment imp = (Impediment) iterator.next();
-            for(AliveImpediment tmp: impediments){
-                if(tmp.getImpediment().equals(imp)){
+            for(int i=0; i<impediments.size; i++){
+                if(impediments.get(i).getImpediment().equals(imp)){
                     found=true;
                     break;
                 }
@@ -240,7 +281,6 @@ public class Renderer extends State {
     private void next() {
         float delta = Gdx.graphics.getDeltaTime();
         accumulator += Math.min(delta, 0.25f);
-
         if (accumulator >= STEP_TIME) {
             accumulator -= STEP_TIME;
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
