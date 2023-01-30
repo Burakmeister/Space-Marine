@@ -9,6 +9,11 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import pl.space_marine.game.bullets.Bullet;
+import pl.space_marine.game.bullets.EDMBullet;
+import pl.space_marine.game.bullets.FireBullet;
+import pl.space_marine.game.bullets.LaserBullet;
+import pl.space_marine.game.bullets.ShotBullet;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.impediments.enemies.Dragon;
 import pl.space_marine.game.impediments.enemies.Drone;
@@ -33,7 +38,6 @@ public class WorldContactListener implements ContactListener {
 
         Body body1 = fixtureA.getBody(), body2 = fixtureB.getBody();
         if (body1 == null || body2 == null) return;
-
 
 //        System.out.println(body1.getUserData() + " : " + body2.getUserData());
 
@@ -85,39 +89,67 @@ public class WorldContactListener implements ContactListener {
             }
         }
 
+        if(body1.getUserData() instanceof Bullet && body2.getUserData() instanceof Impediment
+                || body1.getUserData() instanceof Impediment && body2.getUserData() instanceof Bullet){
+            Impediment impediment = null;
+            Bullet bullet = null;
 
-        // your collision handling code here
-//        System.out.println("no i jeblo");
+            if (body1.getUserData() instanceof Impediment) {
+                impediment = (Impediment) body1.getUserData();
+                bullet = (Bullet) body2.getUserData();
+            } else if (body1.getUserData() instanceof Bullet) {
+                impediment = (Impediment) body2.getUserData();
+                bullet = (Bullet) body1.getUserData();
+            }
 
+            if (impediment instanceof Dragon) {
 
-//        if (bodyB.getUserData() instanceof AliveImpediment && bodyA.getUserData() instanceof Rocket) {
-//            AliveImpediment aliveImpediment = (AliveImpediment) bodyB.getUserData();
-//            Rocket rocket = (Rocket) bodyA.getUserData();
-//
-//            if (aliveImpediment.getImpediment() instanceof Dragon) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Drone) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Ufo) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Balloon) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Bird) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Cloud) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Meteor) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Plane) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof Satelite) {
-//                exit(2);
-//            } else if (aliveImpediment.getImpediment() instanceof SpeedGate) {
-//                exit(2);
-//            }
+            } else if (impediment instanceof Drone) {
 
-//            System.out.println("no i jeblo");
-//    }
+            } else if (impediment instanceof Ufo) {
+
+            } else if (impediment instanceof Balloon) {
+
+            } else if (impediment instanceof Bird) {
+
+            } else if (impediment instanceof Cloud) {
+
+            } else if (impediment instanceof Meteor) {
+
+            } else if (impediment instanceof Plane) {
+
+            } else if (impediment instanceof Satelite) {
+
+            } else if (impediment instanceof SpeedGate) {
+
+            }
+
+        }
+
+        if(body1.getUserData() instanceof Bullet && body2.getUserData() instanceof Rocket
+                || body1.getUserData() instanceof Rocket && body2.getUserData() instanceof Bullet){
+            Rocket rocket = null;
+            Bullet bullet = null;
+
+            if (body1.getUserData() instanceof Impediment) {
+                rocket = (Rocket) body1.getUserData();
+                bullet = (Bullet) body2.getUserData();
+            } else if (body1.getUserData() instanceof Rocket) {
+                rocket = (Rocket) body2.getUserData();
+                bullet = (Bullet) body1.getUserData();
+            }
+
+            if(bullet instanceof ShotBullet){
+
+            }else if(bullet instanceof EDMBullet){
+
+            }else if(bullet instanceof FireBullet){
+
+            }else if(bullet instanceof LaserBullet){
+
+            }
+
+        }
 
     }
 
