@@ -36,7 +36,6 @@ public class AliveImpediment {
             isAnimation = true;
         }
 
-        System.out.println(impediment.getImage().getName() + ", x=" + impediment.getX() + ", y=" + impediment.getY());
 
         if (!(impediment instanceof Cloud)) {
             body = bodiesCache.createBody(impediment.getImage().getName(), world, SCALE, SCALE);

@@ -30,7 +30,6 @@ public class ImpedimentsIterator<E> implements Iterator<E> {
 
     @Override
     public E next() {
-        System.out.println("kolejny");
         return (E) tab[++cursor];
     }
 
@@ -45,7 +44,6 @@ public class ImpedimentsIterator<E> implements Iterator<E> {
 
 
     public void add(Object obj) throws Exception {
-        System.out.println("add " + "lenght="+trueLength);
         if(obj instanceof Impediment){
             if(trueLength<maxOnScreen){
                 tab[trueLength] = (Impediment) obj;

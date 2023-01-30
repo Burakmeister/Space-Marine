@@ -56,7 +56,7 @@ public class UpgradesState extends State {
         Gdx.input.setInputProcessor(stage);
 
         table.setPosition(0,0);
-        table.setDebug(true);
+//        table.setDebug(true);
 
         populateTable(rocket.getAccountBalance());
         addButtonsListeners();
@@ -128,9 +128,9 @@ public class UpgradesState extends State {
         armourText.setAlignment(Align.center);
         upArmour = new TextButton("Upgrade", this.setButton());
 
-        returnButton = new TextButton("Return", this.setButton());
+        returnButton = new TextButton("Exit", this.setButton());
 
-        nextButton = new TextButton("Next Flight", this.setButton());
+        nextButton = new TextButton("Return", this.setButton());
 
 
         // etykiety
@@ -182,7 +182,6 @@ public class UpgradesState extends State {
                 if (500*rocket.getStages()[0].getLevel() <= rocket.getAccountBalance() && rocket.getStages()[0].getLevel() <maxStagesLevel) {
                     rocket.getStages()[0].incrementLevel();
                     rocket.buyUpgrade(500 * rocket.getStages()[0].getLevel());
-                    System.out.println("ulepszono" + rocket.getStages()[0].toString());
                     revalidateTable();
                 }
             }
@@ -194,7 +193,6 @@ public class UpgradesState extends State {
                 if (500*rocket.getStages()[2].getLevel() <= rocket.getAccountBalance() && rocket.getStages()[2].getLevel() <maxStagesLevel) {
                     rocket.getStages()[2].incrementLevel();
                     rocket.buyUpgrade(500 * rocket.getStages()[2].getLevel());
-                    System.out.println("ulepszono" + rocket.getStages()[2].toString());
                     revalidateTable();
                 }
             }
@@ -206,7 +204,6 @@ public class UpgradesState extends State {
                 if (500*rocket.getStages()[1].getLevel() <= rocket.getAccountBalance() && rocket.getStages()[1].getLevel() <maxStagesLevel) {
                     rocket.getStages()[1].incrementLevel();
                     rocket.buyUpgrade(500 * rocket.getStages()[1].getLevel());
-                    System.out.println("ulepszono" + rocket.getStages()[1].toString());
                     revalidateTable();
                 }
             }
@@ -218,7 +215,6 @@ public class UpgradesState extends State {
                 if (500*rocket.getStages()[3].getLevel() <= rocket.getAccountBalance() && rocket.getStages()[3].getLevel() <maxStagesLevel) {
                     rocket.getStages()[3].incrementLevel();
                     rocket.buyUpgrade(500*rocket.getStages()[3].getLevel());
-                    System.out.println("ulepszono" + rocket.getStages()[3].toString());
                     revalidateTable();
                 }
 
@@ -232,7 +228,6 @@ public class UpgradesState extends State {
                     rocket.getStages()[4].incrementLevel();
                     rocket.buyUpgrade(1000*(rocket.getStages()[4].getLevel()));
                     rocket.updateImage(rocket.getStages()[4].getLevel());
-                    System.out.println("ulepszono" + rocket.getStages()[4].toString());
                     revalidateTable();
                 }
             }
@@ -244,7 +239,6 @@ public class UpgradesState extends State {
                 if (500* rocket.getArmor() <= rocket.getAccountBalance() && rocket.getArmor() <maxStagesLevel) {
                     rocket.incrementArmor();
                     rocket.buyUpgrade(500* rocket.getArmor());
-                    System.out.println("ulepszono armour");
                     revalidateTable();
                 }
             }
@@ -253,7 +247,7 @@ public class UpgradesState extends State {
         returnButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Return Button Pressed");
+                System.exit(0);
                 stage.clear();
                 State upgrades = gsm.getStates().peek();
                 gsm.pop();
@@ -271,7 +265,6 @@ public class UpgradesState extends State {
         nextButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed1");
                 stage.clear();
                 State upgrades = gsm.getStates().peek();
                 gsm.pop();

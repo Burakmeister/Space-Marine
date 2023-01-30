@@ -173,4 +173,8 @@ public class Rocket {
     public float getFuel() {
         return fuel;
     }
+
+    public void setFuel(float fuel) {
+        this.fuel = fuel;
+    }
 }

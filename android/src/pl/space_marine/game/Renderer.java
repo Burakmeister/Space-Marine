@@ -68,8 +68,6 @@ public class Renderer extends State {
     private BitmapFont start = new BitmapFont();
     private BitmapFont shop = new BitmapFont();
     private Animator fire;
-    private boolean hasUpdates = false;
-
 
     private int time = 0;
 
@@ -129,6 +127,8 @@ public class Renderer extends State {
 //        rocket.updateImage(1);
 
         createGround();
+        start.getData().setScale(5, 5);
+        shop.getData().setScale(5, 5);
     }
 
 
@@ -146,7 +146,7 @@ public class Renderer extends State {
                 rocket.setOrientation(0);
             }
         }
-        if (Gdx.input.isTouched() && Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
+        if (Gdx.input.isTouched() && Gdx.input.getY() > Gdx.graphics.getHeight() / 2) {
 
             if (!hasUpdates) {
                 gsm.push(new UpgradesState(gsm, stage, rocket));
@@ -161,19 +161,19 @@ public class Renderer extends State {
                 gsm.getStates().push(upgrades);
             }
 
-        }else if(Gdx.input.isTouched() && Gdx.input.getY()<Gdx.graphics.getHeight()/2){
-            if(!gameover && isStarted)
+        } else if (Gdx.input.isTouched() && Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
+            if (!gameover && isStarted) {
                 game.shot();
-                                rocket.shot();
+                rocket.shot();
                 Bullet bullet = game.shot();//new ShotBullet((int) (rocketBody.getPosition().x+rocket.getImage().getTexture().getWidth()/2*SCALE), (int) ((int) rocketBody.getPosition().y+rocket.getImage().getTexture().getHeight()*SCALE));
                 rocket.getBullets().add(bullet);
                 bullets.add(new BulletRenderer(bullet, world));
-            else{
-                for(AliveImpediment imp : impediments){
-                    if(imp.getBody()!=null)
-                    world.destroyBody(imp.getBody());
+            } else {
+                for (AliveImpediment imp : impediments) {
+                    if (imp.getBody() != null)
+                        world.destroyBody(imp.getBody());
                 }
-                rocketBody.setTransform(0,0,0);
+                rocketBody.setTransform(0, 0, 0);
                 Vector2 vec = rocketBody.getPosition();
                 for (Sprite sprite : rocketSprite) {
                     sprite.setOrigin(0, 0);
@@ -188,11 +188,10 @@ public class Renderer extends State {
                 rocket.setX(Gdx.graphics.getWidth() / 2 - Image.ROCKET.getTexture().getWidth() / 2);
                 rocket.setY(0);
                 rocket.setHP(1);
+                this.rocket.setFuel(1);
+
             }
 
-        } else {
-            gameover = false;
-            isStarted = true;
         }
     }
 
@@ -206,14 +205,14 @@ public class Renderer extends State {
     public void render(SpriteBatch sb) {
 
 
-        if(!gameover){
+        if (!gameover) {
             sb.setProjectionMatrix(camera.combined);
             camera.position.set(rocket.getX(), (float) (rocket.getY() + rocket.getImage().getTexture().getHeight() * 0.6), 0); //Ezunia its me bartolomeo
             sb.begin();
 
-            height.draw(sb, "Height: " + rocket.getY(), rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight()*SCALE * 0.15));
-            HP.draw(sb, "HP: " + Math.round(rocket.getHP()*100) + '%', rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight()*SCALE * 0.35));
-            fuel.draw(sb, "Fuel: " + Math.round(rocket.getFuel()*100) + '%', rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight()*SCALE * 0.55));
+            height.draw(sb, "Height: " + rocket.getY(), rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight() * SCALE * 0.15));
+            HP.draw(sb, "HP: " + Math.round(rocket.getHP() * 100) + '%', rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight() * SCALE * 0.35));
+            fuel.draw(sb, "Fuel: " + Math.round(rocket.getFuel() * 100) + '%', rocket.getX(), (int) (rocket.getY() - rocket.getImage().getTexture().getHeight() * SCALE * 0.55));
             next();
             for (AliveImpediment alive : this.impediments) {
                 alive.update();
@@ -233,7 +232,7 @@ public class Renderer extends State {
                 rocket.setOrientation(0);
                 rocketBody.setFixedRotation(true);
             }
-            this.fire.setRotation((int) (Math.toDegrees(rocketBody.getAngle())-90));
+            this.fire.setRotation((int) (Math.toDegrees(rocketBody.getAngle()) - 90));
             this.fire.setX((int) (rocket.getX()));
             this.fire.setY(rocket.getY());
 
@@ -254,8 +253,8 @@ public class Renderer extends State {
                     this.rocket.getBullets().remove(bullet);
                     world.destroyBody(bullet.getBody());
                     bullets.removeValue(bullet, false);
-                }else {
-                    if(!bullet.getBullet().isUsed())
+                } else {
+                    if (!bullet.getBullet().isUsed())
                         bullet.setVx(x);
                     bullet.setVy(y);
                     bullet.getBody().setFixedRotation(true);
@@ -270,13 +269,19 @@ public class Renderer extends State {
             rocketSprite[rocket.getStages()[4].getLevel()].setPosition(rocket.getX(), rocket.getY());
             rocketSprite[rocket.getStages()[4].getLevel()].draw(sb);
 
-            time = time % 10;
+            time = time % 60;
 
 
-            if (time == 0) {
+            if (time == 0 || time==10 || time==20 || time==30 || time==40 || time==50) {
                 iterator = game.drawImpediments();
                 getImpediments(sb);
                 game.shot();
+            }else if(time == 5){
+                rocket.setFuel(rocket.getFuel()-0.01f*5/rocket.getStages()[2].getLevel());
+                if(rocket.getFuel()<=0){
+                    gameover=true;
+                    isStarted=false;
+                }
             }
             time++;
 
@@ -284,10 +289,8 @@ public class Renderer extends State {
             for (; iterator.hasNext(); ) {
                 Impediment imp = (Impediment) iterator.next();
                 if (imp.getHP() <= 0) {
-                    System.out.println("usuwam: " + imp);
                     for (AliveImpediment ai : impediments) {
                         if (ai.getImpediment().equals(imp)) {
-                            System.out.println("usuwam: " + ai.getImpediment().getClass());
                             ai.removeBody(world);
                             this.impediments.removeValue(ai, false);
                         }
@@ -299,19 +302,16 @@ public class Renderer extends State {
 
             if (rocket.getHP() <= 0) {
                 gameover = true;
-                isStarted=false;
+                isStarted = false;
             }
 
             camera.update();// Ezunia its me bartolomeo
-            debugRenderer.render(world, camera.combined);
-        }
-        else{
-        sb.begin();
-        start.getData().setScale(5,5);
-            shop.getData().setScale(5,5);
-            start.draw(sb, "Sklep", Gdx.graphics.getWidth()/2-50, Gdx.graphics.getHeight()/4);
-            shop.draw(sb, "Start", Gdx.graphics.getWidth()/2-50, 3*Gdx.graphics.getHeight()/4);
-        sb.end();
+//            debugRenderer.render(world, camera.combined);
+        } else {
+            sb.begin();
+            start.draw(sb, "Sklep", Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() / 4);
+            shop.draw(sb, "Start", Gdx.graphics.getWidth() / 2 - 50, 3 * Gdx.graphics.getHeight() / 4);
+            sb.end();
         }
 
     }

@@ -36,7 +36,7 @@ public class MenuState extends State {
         playButton = new TextButton("Play", this.setButton());
         highScoreButton = new TextButton("High Score", this.setButton());
 
-        table.setDebug(true);
+//        table.setDebug(true);
         table.setPosition(0,0);
         table.align(Align.center);
 
@@ -53,7 +53,6 @@ public class MenuState extends State {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Button Pressed");
                 gsm.push(new Renderer(gsm, stage));
             }
         });
@@ -61,7 +60,6 @@ public class MenuState extends State {
 
     public void setInputProcessor(Stage stage) {
         Gdx.input.setInputProcessor(stage);
-        System.out.println("dddddd");
     }
 
 
