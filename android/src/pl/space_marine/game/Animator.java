@@ -16,6 +16,8 @@ public class Animator{
     private pl.space_marine.game.assets.Image anime;
     private SpriteBatch batch;
 
+    private boolean looping = true;
+
     float stateTime;
 
     public Animator(SpriteBatch batch, pl.space_marine.game.assets.Image animation, int x, int y){
@@ -23,6 +25,7 @@ public class Animator{
         this.x = x;
         this.y = y;
         this.batch = batch;
+        looping = false;
         this.create();
     }
 
@@ -39,7 +42,7 @@ public class Animator{
 
     public void render() {
         stateTime+=Gdx.graphics.getDeltaTime();
-        TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
+        TextureRegion currentFrame = animation.getKeyFrame(stateTime, looping);
         int width, height;
         width = this.anime.getTexture().getWidth()/this.anime.getCols();
         height = this.anime.getTexture().getHeight()/this.anime.getRows();

@@ -90,15 +90,15 @@ public class UpgradesState extends State {
         upTankBtn = new TextButton("Upgrade", this.setButton());
 
 //        avionics row
-        Texture avionicsTex = Image.AVIONICS.getTexture();
-        com.badlogic.gdx.scenes.scene2d.ui.Image avionicsImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(avionicsTex);
-        avionicsImage.setScaling(Scaling.fit);
-
-        avionicsText = new Label("Avionics | Cost: " + 500*rocket.getStages()[2].getLevel(),this.setLabel());
-        Label avionicsLvlable = new Label("Level " + rocket.getStages()[1].getLevel() + ".", this.setLabel());
-        avionicsLvlable.setAlignment(Align.center);
-        avionicsText.setAlignment(Align.center);
-        upAvionicsBtn = new TextButton("Upgrade", this.setButton());
+//        Texture avionicsTex = Image.AVIONICS.getTexture();
+//        com.badlogic.gdx.scenes.scene2d.ui.Image avionicsImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(avionicsTex);
+//        avionicsImage.setScaling(Scaling.fit);
+//
+//        avionicsText = new Label("Avionics | Cost: " + 500*rocket.getStages()[2].getLevel(),this.setLabel());
+//        Label avionicsLvlable = new Label("Level " + rocket.getStages()[1].getLevel() + ".", this.setLabel());
+//        avionicsLvlable.setAlignment(Align.center);
+//        avionicsText.setAlignment(Align.center);
+//        upAvionicsBtn = new TextButton("Upgrade", this.setButton());
 
 //        gun row
         Texture gunTex = Image.GUN.getTexture();
@@ -148,8 +148,8 @@ public class UpgradesState extends State {
         table.add(tankLvlable);
         table.add(upTankBtn).row();
         table.add(avionicsText).colspan(3).row();
-        table.add(avionicsImage).width(50).height(50).pad(0,0,5,0);
-        table.add(avionicsLvlable);
+//        table.add(avionicsImage).width(50).height(50).pad(0,0,5,0);
+//        table.add(avionicsLvlable);
         table.add(upAvionicsBtn).row();
         table.add(gunText).colspan(3).row();
         table.add(gunImage).width(50).height(50).pad(0,0,5,0);
@@ -198,16 +198,16 @@ public class UpgradesState extends State {
             }
         });
 
-        upAvionicsBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (500*rocket.getStages()[1].getLevel() <= rocket.getAccountBalance() && rocket.getStages()[1].getLevel() <maxStagesLevel) {
-                    rocket.getStages()[1].incrementLevel();
-                    rocket.buyUpgrade(500 * rocket.getStages()[1].getLevel());
-                    revalidateTable();
-                }
-            }
-        });
+//        upAvionicsBtn.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                if (500*rocket.getStages()[1].getLevel() <= rocket.getAccountBalance() && rocket.getStages()[1].getLevel() <maxStagesLevel) {
+//                    rocket.getStages()[1].incrementLevel();
+//                    rocket.buyUpgrade(500 * rocket.getStages()[1].getLevel());
+//                    revalidateTable();
+//                }
+//            }
+//        });
 
         upGunBtn.addListener(new ChangeListener() {
             @Override

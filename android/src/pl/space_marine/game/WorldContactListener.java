@@ -1,7 +1,5 @@
 package pl.space_marine.game;
 
-import static java.lang.System.exit;
-
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -10,10 +8,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 import pl.space_marine.game.bullets.Bullet;
-import pl.space_marine.game.bullets.EDMBullet;
-import pl.space_marine.game.bullets.FireBullet;
-import pl.space_marine.game.bullets.LaserBullet;
-import pl.space_marine.game.bullets.ShotBullet;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.impediments.enemies.Dragon;
 import pl.space_marine.game.impediments.enemies.Drone;
@@ -140,19 +134,7 @@ public class WorldContactListener implements ContactListener {
                 rocket = (Rocket) body2.getUserData();
                 bullet = (Bullet) body1.getUserData();
             }
-
-            if(bullet instanceof ShotBullet){
-
-            }else if(bullet instanceof EDMBullet){
-
-            }else if(bullet instanceof FireBullet){
-
-            }else if(bullet instanceof LaserBullet){
-
-            }
-
         }
-
     }
 
     @Override

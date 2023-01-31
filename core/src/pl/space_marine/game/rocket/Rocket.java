@@ -37,7 +37,9 @@ public class Rocket {
 
     private float HP = 1;
     private float fuel = 1;
-    private float orientation = 0; //radiany, ale pomijamy pi, wiec -> (0-2) 0 - w gore     1 - w dol
+    private float rotation = 0;
+
+    private int orientation = 0;
 
     private Image image;
     private Set<Listener> listeners;
@@ -66,10 +68,7 @@ public class Rocket {
 
     // strzelanie
     public void shot(){
-        System.out.println("peeew peeew");
-
         notifyListeners();
-        //not implemented yet
     }
     public Image getImage() {
         return image;
@@ -87,11 +86,11 @@ public class Rocket {
         return y;
     }
 
-    public float getOrientation() {
+    public int getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(float orientation) {
+    public void setOrientation(int orientation) {
         this.orientation = orientation;
     }
 
@@ -176,5 +175,13 @@ public class Rocket {
 
     public void setFuel(float fuel) {
         this.fuel = fuel;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
     }
 }

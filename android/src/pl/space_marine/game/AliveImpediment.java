@@ -6,12 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Transform;
 import com.badlogic.gdx.physics.box2d.World;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
-import pl.space_marine.game.Animator;
-import pl.space_marine.game.assets.Direction;
+import pl.space_marine.game.assets.Image;
 import pl.space_marine.game.impediments.Impediment;
 import pl.space_marine.game.impediments.obstacles.Cloud;
 
@@ -20,6 +18,8 @@ public class AliveImpediment {
     private Impediment impediment;
     private Object drawer;
     private boolean isAnimation;
+    private short endFrames = 0;
+    private boolean toRemove = false;
 
     public AliveImpediment(Impediment impediment, SpriteBatch batch, PhysicsShapeCache bodiesCache, World world) {
         this.impediment = impediment;
@@ -50,33 +50,35 @@ public class AliveImpediment {
     }
 
     public void update() {
-        if (!(impediment instanceof Cloud)) {
-            if (impediment.getSpeed() != 0) {
-                float x = (float) Math.sin(body.getAngle() - Math.PI);
-                float y = (float) Math.cos(body.getAngle());
+        if(this.endFrames==0){
+            if (!(impediment instanceof Cloud)) {
+                if (impediment.getSpeed() != 0) {
+                    float x = (float) Math.sin(body.getAngle() - Math.PI);
+                    float y = (float) Math.cos(body.getAngle());
 
-                body.applyForceToCenter(new Vector2(
-                                body.getMass() * (x * impediment.getSpeed()),//x force to apply
-                                body.getMass() * (y * impediment.getSpeed())),
-                        true);
+                    body.applyForceToCenter(new Vector2(
+                                    body.getMass() * (x * impediment.getSpeed()),//x force to apply
+                                    body.getMass() * (y * impediment.getSpeed())),
+                            true);
+                }
+
+                impediment.setX((int) body.getPosition().x);
+                impediment.setY((int) body.getPosition().y);
+
+                if (isAnimation) {
+                    Animator anime = (Animator) this.drawer;
+                    anime.setX(impediment.getX());
+                    anime.setY(impediment.getY());
+                    anime.setRotation((int) Math.toDegrees(body.getAngle()));
+                } else {
+                    Sprite sprite = (Sprite) this.drawer;
+                    sprite.setPosition(impediment.getX(), impediment.getY());
+                    sprite.setRotation((float) Math.toDegrees(body.getAngle()));
+                }
+
+            }else{
+                ((Sprite) drawer).setPosition(impediment.getX(), impediment.getY());
             }
-
-            impediment.setX((int) body.getPosition().x);
-            impediment.setY((int) body.getPosition().y);
-
-            if (isAnimation) {
-                Animator anime = (Animator) this.drawer;
-                anime.setX(impediment.getX());
-                anime.setY(impediment.getY());
-                anime.setRotation((int) Math.toDegrees(body.getAngle()));
-            } else {
-                Sprite sprite = (Sprite) this.drawer;
-                sprite.setPosition(impediment.getX(), impediment.getY());
-                sprite.setRotation((float) Math.toDegrees(body.getAngle()));
-            }
-
-        }else{
-            ((Sprite) drawer).setPosition(impediment.getX(), impediment.getY());
         }
     }
 
@@ -88,6 +90,12 @@ public class AliveImpediment {
         } else {
             Animator drawer = (Animator) this.drawer;
             drawer.render();
+            if(endFrames>0){
+                endFrames++;
+                if(endFrames>=15){
+                    this.toRemove = true;
+                }
+            }
         }
     }
 
@@ -106,15 +114,15 @@ public class AliveImpediment {
         return impediment;
     }
 
-    public Object getDrawer() {
-        return drawer;
-    }
-
-    public boolean isAnimation() {
-        return isAnimation;
-    }
-
-    public void removeBody(World world){
+    public void removeBody(World world, SpriteBatch sb){
         world.destroyBody(body);
+        drawer = new Animator(sb, Image.EXPLOSION, this.impediment.getX(), impediment.getY());
+        ((Animator) drawer).render();
+        isAnimation = true;
+        endFrames = 1;
+    }
+
+    public boolean isToRemove() {
+        return toRemove;
     }
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import pl.space_marine.game.assets.Image;
 
-public abstract class Bullet extends Rectangle {
+public class Bullet{
 
     // położenie pocisku
     public int x;
@@ -27,12 +27,11 @@ public abstract class Bullet extends Rectangle {
     private boolean used = false;
     private boolean hitted = false;
 
-    private float orientation = 0;
-    public Bullet(int x, int y, int power, Image image) {
+    public Bullet(int x, int y, int power) {
         this.x = x;
         this.y = y;
         this.power = power;
-        this.image = image;
+        this.image = Image.SHOTBULLET;
     }
     public void setY(int y) {
         this.y = y;

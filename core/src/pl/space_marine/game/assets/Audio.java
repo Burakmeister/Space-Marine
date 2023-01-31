@@ -6,10 +6,15 @@ import com.badlogic.gdx.audio.Sound;
 public enum Audio{
     //ENGINE("engine.wav"),
 
-    SHOTBULLET("sci-fi-gun-shot.wav");
+    SHOTBULLET("shot_laser.mp3"),
+    EXPLOSION("explosion.wav");
 
     private Sound sound;
     private Audio(String source){
         this.sound = Gdx.audio.newSound(Gdx.files.internal(source));
+    }
+
+    public Sound getSound() {
+        return sound;
     }
 }
