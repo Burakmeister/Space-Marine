@@ -52,15 +52,15 @@ public class AliveImpediment {
     public void update() {
         if(this.endFrames==0){
             if (!(impediment instanceof Cloud)) {
-                if (impediment.getSpeed() != 0) {
-                    float x = (float) Math.sin(body.getAngle() - Math.PI);
-                    float y = (float) Math.cos(body.getAngle());
-
-                    body.applyForceToCenter(new Vector2(
-                                    body.getMass() * (x * impediment.getSpeed()),//x force to apply
-                                    body.getMass() * (y * impediment.getSpeed())),
-                            true);
-                }
+//                if (impediment.getSpeed() != 0) {
+//                    float x = (float) Math.sin(body.getAngle() - Math.PI);
+//                    float y = (float) Math.cos(body.getAngle());
+//
+//                    body.applyForceToCenter(new Vector2(
+//                                    body.getMass() * (x * impediment.getSpeed()),//x force to apply
+//                                    body.getMass() * (y * impediment.getSpeed())),
+//                            true);
+//                }
 
                 impediment.setX((int) body.getPosition().x);
                 impediment.setY((int) body.getPosition().y);
